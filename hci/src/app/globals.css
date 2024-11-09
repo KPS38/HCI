@@ -3,25 +3,53 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1e1e1e; /* Dark background */
+  --foreground: #ffffff; /* Default font color */
+  --menu-selected: #10B981; /* Color for selected menu item */
+  --menu-unselected: #ffffff; /* Color for unselected menu item */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Apply the GIF as a background */
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-image: url("./matrix.webp"); /* Path to your GIF */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Keeps GIF fixed during scrolling */
+  font-family: "JetBrains Mono", monospace;
+  margin: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Styling for the navigation menu bar */
+.navbar {
+  background-color: var(--background); /* Gray background */
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  position: fixed; /* Fixed position at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensures it stays above other content */
+}
+
+/* Add padding to the top of the content to avoid overlap with navbar */
+.content {
+  padding-top: 4rem; /* Adjust based on navbar height */
+}
+/* Styling for menu items */
+.menu-item {
+  color: var(--menu-unselected); /* Default color */
+  transition: color 0.3s ease;
+}
+
+.menu-item:hover {
+  color: var(--menu-selected); /* Change color on hover */
+  text-decoration: underline;
+}
+
+.menu-item-selected {
+  color: var(--menu-selected); /* Selected color */
+  font-weight: bold;
 }
