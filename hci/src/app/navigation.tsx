@@ -40,10 +40,6 @@ export function Navigation() {
   return (
     <nav className="navbar">
       <div className="flex items-center space-x-8">
-        {/* Logo on the left side */}
-        <Link href="/">
-          <img src="/logo.jpg"/> {/* Adjust height as needed */}
-        </Link>
         {/* Navigation Links */}
         <ul className="flex space-x-4">
           {pages.map((page, index) => processPage(page, index, pathname))}
