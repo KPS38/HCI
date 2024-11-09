@@ -8,6 +8,7 @@ type Page = {
   path: `/${string}`;
 };
 
+// Define the pages in the navigation
 const pages: Page[] = [
   { title: "Home", path: "/" },
   { title: "Services", path: "/services" },
@@ -38,9 +39,16 @@ export function Navigation() {
   const pathname = usePathname();
   return (
     <nav className="navbar">
-      <ul className="flex space-x-4">
-        {pages.map((page, index) => processPage(page, index, pathname))}
-      </ul>
+      <div className="flex items-center space-x-8">
+        {/* Logo on the left side */}
+        <Link href="/">
+          <img src="/logo.jpg"/> {/* Adjust height as needed */}
+        </Link>
+        {/* Navigation Links */}
+        <ul className="flex space-x-4">
+          {pages.map((page, index) => processPage(page, index, pathname))}
+        </ul>
+      </div>
     </nav>
   );
 }
