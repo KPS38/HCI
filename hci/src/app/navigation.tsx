@@ -14,36 +14,40 @@ const pages: Page[] = [
   { title: "Certifications", path: "/certifications" },
   { title: "Blog", path: "/blog" },
   { title: "About us", path: "/about" },
-  { title: "Sign in", path: "/signin" },
 ];
 
 export function Navigation() {
   const pathname = usePathname();
-  return (
-    <nav className="bg-gray-800 fixed top-0 w-full px-4">
-      <div className="max-w-screen-lg mx-auto flex items-center justify-between h-16">
-        {/* Logo */}
-        <Link href="/">
-          <img src="/icon.png" alt="Logo" className="h-10 w-auto" />
-        </Link>
 
-        {/* Navigation Links */}
-        <ul className="flex flex-1 justify-around items-center space-x-4">
+  return (
+    <nav className="navbar">
+      <div className="navbar-content">
+        {/* Logo on the left side with consistent padding */}
+        <div className="navbar-logo-container">
+          <Link href="/">
+            <img src="/icon.png" alt="Logo" className="navbar-logo" />
+          </Link>
+        </div>
+
+        {/* Menu links and Sign In button on the right side */}
+        <div className="navbar-links">
           {pages.map((page, index) => (
-            <li key={index}>
-              <Link
-                href={page.path}
-                className={`${
-                  pathname === page.path
-                    ? "text-green-500 font-bold"
-                    : "text-white"
-                } hover:underline`}
-              >
-                {page.title}
-              </Link>
-            </li>
+            <Link
+              key={index}
+              href={page.path}
+              className={`menu-item ${
+                pathname === page.path ? "menu-item-selected" : ""
+              }`}
+            >
+              {page.title}
+            </Link>
           ))}
-        </ul>
+
+          {/* Sign In Button */}
+          <Link href="/signin" className="sign-in-button">
+            Sign In
+          </Link>
+        </div>
       </div>
     </nav>
   );
