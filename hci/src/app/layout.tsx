@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Navigation } from "./navigation";
+import { Navigation } from "../components/navigation";
 
 
 const jetBrainsMono = localFont({
