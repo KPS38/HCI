@@ -20,11 +20,11 @@ const pages: Page[] = [
 
 function processPage(page: Page, index: number, pathname: string) {
   return (
-    <li key={index}>
+    <li key={index} className="menu-item">
       <Link
         href={page.path}
         className={
-          pathname === page.path ? "font-extrabold text-slate-600" : ""
+          pathname === page.path ? "menu-item-selected" : ""
         }
       >
         {page.title}
@@ -35,9 +35,9 @@ function processPage(page: Page, index: number, pathname: string) {
 
 export function Navigation() {
   const pathname = usePathname();
-  console.log(pathname);
+
   return (
-    <ul className="flex justify-center space-x-4 mt-8">
+    <ul className="secondary-navbar">
       {pages.map((page, index) => processPage(page, index, pathname))}
     </ul>
   );

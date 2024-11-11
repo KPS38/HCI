@@ -28,7 +28,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
-      <article className="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden p-6">
+      <article className="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
         <Link
           href="/blog"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 mb-6"
