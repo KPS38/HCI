@@ -13,7 +13,7 @@ const pages: Page[] = [
   { title: "Services", path: "/services" },
   { title: "Certifications", path: "/certifications" },
   { title: "Blog", path: "/blog" },
-  { title: "About us", path: "/about" },
+  { title: "About_Us", path: "/about" },
 ];
 
 export function Navigation() {
