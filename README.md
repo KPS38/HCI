@@ -26,7 +26,7 @@
 
 - Link to Assignment 1: [**Assignment 1**](assignments/Assignment%201/Figma.mp4) <!-- Replace with actual URL -->
 - Link to Assignment 2: [**Assignment 2**](https://carpal-helicopter-e7b.notion.site/User-Personas-Information-Arhitecture-12f3b8213e468030a6eecb1ef5f5f04e) <!-- Replace with actual URL -->
-- Link to Assignment 3: [**Assignment 3**](URL_TO_ASSIGNMENT_3) <!-- Replace with actual URL -->
+- Link to Assignment 3: [**Assignment 3**](https://cyops.vercel.app/) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
