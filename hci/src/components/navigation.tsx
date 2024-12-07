@@ -32,7 +32,7 @@ export function Navigation() {
         {/* Logo on the left side */}
         <div className="navbar-logo-container">
           <Link href="/">
-            <img src="/icon.png" alt="Logo" className="navbar-logo" />
+            <img src="/images/icon.png" alt="Logo" className="navbar-logo" />
           </Link>
         </div>
 

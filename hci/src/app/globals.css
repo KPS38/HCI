@@ -11,18 +11,6 @@
   --button-text: #1e1e1e; /* Button text color */
 }
 
-/* Apply the GIF as a background */
-body {
-  color: var(--foreground);
-  background: var(--background);
-  background-image: url("./matrix.webp"); /* Path to your GIF */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  font-family: "JetBrains Mono", monospace;
-  margin: 0;
-}
-
 /* Base navbar styles for larger screens */
 .navbar {
   background: linear-gradient(90deg, #1e1e1e, #333333);
