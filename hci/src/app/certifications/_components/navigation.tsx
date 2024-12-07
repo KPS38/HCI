@@ -18,12 +18,12 @@ const pages: Page[] = [
 
 function processPage(page: Page, index: number, pathname: string) {
   return (
-    <li key={index} className="menu-item">
+    <li key={index} className="text-white hover:text-[#10B981]">
       <Link
         href={page.path}
-        className={
-          pathname === page.path ? "menu-item-selected" : ""
-        }
+        className={`text-base font-normal hover:underline ${
+          pathname === page.path ? "font-bold text-[#10B981]" : ""
+        }`}
       >
         {page.title}
       </Link>
@@ -35,7 +35,7 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <ul className="secondary-navbar">
+    <ul className="flex justify-center gap-8 py-8 bg-[#1e1e1e] bg-opacity-50">
       {pages.map((page, index) => processPage(page, index, pathname))}
     </ul>
   );
