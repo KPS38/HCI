@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Navigation, Footer } from "../components/navigation";
 
-const jetBrainsMono = localFont({
-  src: "./fonts/JetBrainsMono-Regular.woff2",
-  variable: "--font-jetbrains-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "cyOps",
