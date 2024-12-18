@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #1e1e1e; /* Dark background */
+  --foreground: #ffffff; /* Default font color */
+  --menu-selected: #10B981; /* Color for selected menu item */
+  --menu-unselected: #ffffff; /* Color for unselected menu item */
+  --button-bg: #10B981; /* Button background color */
+  --button-text: #1e1e1e; /* Button text color */
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  background-image: url("/images/matrix.webp"); /* Path to your GIF */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "JetBrains Mono", monospace;
+  margin: 0;
+}
