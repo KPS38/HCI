@@ -24,12 +24,12 @@ type Image = {
 
 export type Post = {
   id: string;
-  title: string | null;
-  brief: string | null;
-  story: string | null;
-  date: string | null;
-  image: Image | null;  // Changed from 'any' to a more specific type
-  writer: string | null;
+  title: string;
+  brief: string;
+  story: string;
+  date: string;
+  image: Image;  // Changed from 'any' to a more specific type
+  writer: string;
 };
 
 export async function getPostsCount(): Promise<number> {
