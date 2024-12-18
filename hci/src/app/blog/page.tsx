@@ -3,7 +3,11 @@ import { getPosts, getPostsCount } from './_lib/api';
 import type { Post } from './_lib/api';
 import Pagination from './_components/pagination';
 
-export default async function Blog({ searchParams }: any) {
+type BlogProps = {
+  searchParams: Record<string, string | undefined>; // Explicitly type searchParams
+};
+
+export default async function Blog({ searchParams }: BlogProps) {
   const currentPage = parseInt(searchParams.page || '1', 10);
   const PAGE_SIZE = 6;
   const start = (currentPage - 1) * PAGE_SIZE;
@@ -28,15 +32,15 @@ export default async function Blog({ searchParams }: any) {
               className="bg-white border rounded-lg shadow-lg overflow-hidden"
             >
               <img
-                src={post.image.fields.file.url}
-                alt={post.title}
+                src={post.image?.fields.file.url || ''}
+                alt={post.title || 'Post Image'}
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-3 text-gray-800">
                   {post.title}
                 </h2>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.brief}</p> 
+                <p className="text-gray-600 mb-4 line-clamp-3">{post.brief}</p>
                 <p className="text-sm text-gray-400 mb-4">
                   {new Date(post.date).toLocaleDateString()}
                 </p>
