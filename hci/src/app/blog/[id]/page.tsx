@@ -19,8 +19,8 @@ export default async function BlogPost({ params }: BlogPostProps) {
 
   const { title, image, brief, date, story, writer } = post;
 
-  // Extract the image URL if the image exists
-  const imageUrl = image?.fields?.file?.url || ''; // Fallback to empty string if no image
+  // Extract the image URL, and fallback to an empty string if image is null or undefined
+  const imageUrl = image?.fields?.file?.url ?? ''; // Use empty string as fallback for null or undefined
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
