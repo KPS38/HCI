@@ -19,6 +19,9 @@ export default async function BlogPost({ params }: BlogPostProps) {
 
   const { title, image, brief, date, story, writer } = post;
 
+  // Extract the image URL if the image exists
+  const imageUrl = image?.fields?.file?.url || ''; // Fallback to empty string if no image
+
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
       <article className="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
@@ -31,9 +34,9 @@ export default async function BlogPost({ params }: BlogPostProps) {
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
           {title}
         </h1>
-        {image && (
+        {imageUrl && (
           <img
-            src={image}
+            src={imageUrl}
             alt={title}
             className="w-full h-48 object-cover rounded-md mb-4"
           />
