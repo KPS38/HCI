@@ -1,51 +1,49 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { getPost } from '../_lib/api';
+import { getCertification } from '../_lib/api';
 
 export const metadata: Metadata = {
-  title: "Blog Post",
+  title: "Certification",
 };
 
-type BlogPostProps = {
+type CertificationProps = {
   params: { id: string };
 };
 
-export default async function BlogPost({ params }: BlogPostProps) {
-  const post = await getPost(params.id);
+export default async function CertificationPost({ params }: CertificationProps) {
+  const post = await getCertification(params.id);
 
   if (!post) {
-    return <h1 className="text-center mt-10 text-red-500">Post Not Found</h1>;
+    return <h1 className="text-center mt-10 text-red-500">Certification Not Found</h1>;
   }
 
-  const { title, image, brief, date, story, writer } = post;
+  const { name, provider, description, image, duration, price} = post;
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
       <article className="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
         <Link
-          href="/blog"
+          href="/certifications/available"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 mb-6"
         >
-          Back to Blog
+          Back to Certifactions
         </Link>
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
-          {title}
+          {name}
         </h1>
         {image && (
           <img
             src={image}
-            alt={title}
+            alt={name}
             className="w-full h-48 object-cover rounded-md mb-4"
           />
         )}
         <p className="text-sm text-gray-400 mb-4">
-          By: {writer}
+          Provider: {provider}
         </p>
-        <p className="text-sm text-gray-400 mb-4">
-          {date ? new Date(date).toLocaleDateString() : "No date available"}
-        </p>
-        <p className="text-gray-600 mb-4">{brief}</p>
-        <p className="text-gray-600">{story}</p>
+        <p className="text-gray-600 mb-4">{duration}</p>
+        <p className="text-gray-600 mb-4">{price}</p>
+        <p className="text-gray-600">{description}</p>
       </article>
     </main>
   );

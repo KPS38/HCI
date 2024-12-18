@@ -1,57 +1,60 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { getPosts, getPostsCount } from "./_lib/api";
-import type { Post } from "./_lib/api";
-import Pagination from "./_components/pagination";
+import Link from 'next/link';
+import { getPosts, getPostsCount } from './_lib/api';
+import type { Post } from './_lib/api';
+import Pagination from './_components/pagination';
 
-type BlogPageProps = {
-  searchParams: { page: string };
-};
+export default async function Blog({ searchParams }: any) {
+  const currentPage = parseInt(searchParams.page || '1', 10);
+  const PAGE_SIZE = 6;
+  const start = (currentPage - 1) * PAGE_SIZE;
 
-const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 6;
+  const [posts, totalPosts] = await Promise.all([
+    getPosts({ _start: start, _limit: PAGE_SIZE }),
+    getPostsCount(),
+  ]);
 
-export const metadata: Metadata = {
-  title: "Blog",
-};
+  const pagesCount = Math.ceil(totalPosts / PAGE_SIZE);
 
-function processPost(post: Post) {
-  const { id, title } = post;
   return (
-    <li key={id} className="mb-4">
-      <Link
-        href={`/blog/${id}`}
-        className="block p-6 bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 transition-colors duration-200"
-      >
-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-          Post {id}: {title}
-        </h2>
-        <p className="font-normal text-gray-700">
-          Click to read more about this fascinating topic...
-        </p>
-      </Link>
-    </li>
-  );
-}
+    <div className="bg-white bg-opacity-90 text-[#1e1e1e] text-left w-full py-20 min-h-screen p-6 items-center">
+      <div className="max-w-7xl mx-auto py-12 px-6">
+        <h1 className="text-4xl font-bold mb-8 text-center">Latest Blog Posts</h1>
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const postsCount = await getPostsCount();
-  const pagesCount = Math.ceil(postsCount / PAGE_SIZE);
-  // Ensure the page number is a positive integer.
-  const currentPage = Math.min(
-    /^[1-9][0-9]*$/.test(searchParams.page) ? Number(searchParams.page) : 1,
-    pagesCount
-  );
-  const _start = (currentPage - 1) * PAGE_SIZE;
-  const _limit = PAGE_SIZE;
+        {/* Blog Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post: Post) => (
+            <div
+              key={post.id}
+              className="bg-white border rounded-lg shadow-lg overflow-hidden"
+            >
+              <img
+                src={post.image.fields.file.url}
+                alt={post.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold mb-3 text-gray-800">
+                  {post.title}
+                </h2>
+                <p className="text-gray-600 mb-4 line-clamp-3">{post.brief}</p> 
+                <p className="text-sm text-gray-400 mb-4">
+                  {new Date(post.date).toLocaleDateString()}
+                </p>
+                <Link
+                  href={`/blog/${post.id}`}
+                  className="text-[#10B981] font-medium hover:underline"
+                >
+                  Read More →
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
 
-  const posts = await getPosts({ _start, _limit });
-  return (
-    <div className="content">
-      <main className="flex min-h-screen max-w-3xl m-auto flex-col items-center p-10">
-        <h1 className="text-6xl font-extrabold tracking-tight mb-10 mt-32">Blog</h1>
-        <Pagination currentPage={currentPage} pagesCount={pagesCount} />
-        <ul className="w-full space-y-4">{posts.map(processPost)}</ul>
-      </main>
+        <div className="mt-10">
+          <Pagination currentPage={currentPage} pagesCount={pagesCount} />
+        </div>
+      </div>
     </div>
   );
 }

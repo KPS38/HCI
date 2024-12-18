@@ -1,9 +1,51 @@
-export default function Available() {
+import Link from 'next/link';
+import { getCertifications, Certification } from "./_lib/api";
+
+export default async function Certifications() {
+  const certifications: Certification[] = await getCertifications();
+
   return (
-    <div className="content">
-      <main className="flex min-h-screen flex-col items-center p-10">
-        <h1 className="text-6xl font-extrabold tracking-tight">Available_Certifications</h1>
-      </main>
+    <div className="bg-white bg-opacity-90 text-[#1e1e1e] min-h-screen py-12 px-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8 text-center">Certifications</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {certifications.map((cert) => (
+            <div
+              key={cert.id}
+              className="bg-gray-100 border rounded-lg overflow-hidden shadow-lg "
+            >
+              <div className="p-6">
+                <h2 className="text-2xl font-bold mb-2 text-center">{cert.name}</h2>
+                {cert.image && (
+                <img
+                  src={cert.image}
+                  alt={cert.name}
+                  className="mx-auto w-42 h-32 object-cover"
+                />
+              )}
+                <p className="text-gray-600 mb-1">
+                  <strong>Provider:</strong> {cert.provider}
+                </p>
+                <p className="text-gray-600 mb-1">
+                  <strong>Duration:</strong> {cert.duration}
+                </p>
+                <p className="text-gray-600 mb-1">
+                  <strong>Price:</strong> {cert.price}
+                </p>
+                <p className="text-gray-700 mt-4 line-clamp-3">
+                  {cert.description}
+                </p>
+                <Link
+                  href={`/certifications/available/${cert.id}`}
+                  className="text-[#10B981] font-medium hover:underline"
+                >
+                  Read More →
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
