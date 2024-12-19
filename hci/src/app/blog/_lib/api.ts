@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { createClient, Entry, EntrySkeletonType } from 'contentful';
+import { createClient, Entry, EntrySkeletonType, Asset } from 'contentful';
 dotenv.config();
 
 const client = createClient({
@@ -12,12 +12,23 @@ type PagingInfo = {
   _limit?: number;
 };
 
+type Image = {
+  fields: {
+    file: {
+      url: string;
+      fileName: string;
+      contentType: string;
+    };
+  };
+};
+
 export type Post = {
   id: string;
   title: string;
   brief: string;
   story: string;
   date: string;
+  image: Image | null;
   writer: string;
 };
 
@@ -26,6 +37,7 @@ type PostFields = EntrySkeletonType & {
   brief: string;
   story: string;
   date: string;
+  image: Asset | null;
   writer: string;
 };
 
@@ -51,12 +63,14 @@ export async function getPosts({
   });
 
   return entries.items.map((item) => {
+    const image = item.fields.image && typeof item.fields.image === 'object' && 'fields' in item.fields.image ? { fields: { file: (item.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
     return {
       id: item.sys.id,
       title: item.fields.title as string,
       brief: item.fields.brief as string,
       story: item.fields.story as string,
       date: item.fields.date as string,
+      image: image,
       writer: item.fields.writer as string,
     };
   });
@@ -65,6 +79,7 @@ export async function getPosts({
 export async function getPost(id: string): Promise<Post | null> {
   try {
     const entry = await client.getEntry<PostFields>(id);
+    const image = entry.fields.image && typeof entry.fields.image === 'object' && 'fields' in entry.fields.image ? { fields: { file: (entry.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
 
     return {
       id: entry.sys.id,
@@ -72,6 +87,7 @@ export async function getPost(id: string): Promise<Post | null> {
       brief: entry.fields.brief as string,
       story: entry.fields.story as string,
       date: entry.fields.date as string,
+      image: image,
       writer: entry.fields.writer as string,
     };
   } catch (error) {

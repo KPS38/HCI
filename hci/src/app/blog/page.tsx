@@ -30,6 +30,13 @@ export default async function Blog({ searchParams }: BlogProps) {
               key={post.id}
               className="bg-white border rounded-lg shadow-lg overflow-hidden"
             >
+              {post.image && (
+                <img
+                  src={post.image.fields.file.url}
+                  alt={post.title || 'Post Image'}
+                  className="w-full h-48 object-cover"
+                />
+              )}
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-3 text-gray-800">
                   {post.title}
