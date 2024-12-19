@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { createClient, Entry } from 'contentful';
+import { createClient, Entry, EntrySkeletonType } from 'contentful';
 dotenv.config();
 
 const client = createClient({
@@ -12,25 +12,24 @@ type PagingInfo = {
   _limit?: number;
 };
 
-type Image = {
-  fields: {
-    file: {
-      url: string;
-      fileName: string;
-      contentType: string;
-    };
-  };
-};
-
 export type Post = {
   id: string;
   title: string;
   brief: string;
   story: string;
   date: string;
-  image: Image;  // Changed from 'any' to a more specific type
   writer: string;
 };
+
+type PostFields = EntrySkeletonType & {
+  title: string;
+  brief: string;
+  story: string;
+  date: string;
+  writer: string;
+};
+
+export type PostEntry = Entry<PostFields>;
 
 export async function getPostsCount(): Promise<number> {
   const entries = await client.getEntries({
@@ -44,40 +43,39 @@ export async function getPosts({
   _start = 0,
   _limit = 10,
 }: PagingInfo): Promise<Post[]> {
-  const entries = await client.getEntries({
+  const entries = await client.getEntries<PostFields>({
     content_type: 'post',
     skip: _start,
     limit: _limit,
-    order: '-fields.date', // Order posts by date in descending order (latest first)
+    order: ['-fields.date'],
   });
 
-  return entries.items.map((item: Entry<Post>) => ({
-    id: item.sys.id,
-    title: item.fields.title,
-    brief: item.fields.brief,
-    story: item.fields.story,
-    date: item.fields.date,
-    image: item.fields.image?.fields.file.url ?? null,  // Ensuring image is either a URL or null
-    writer: item.fields.writer,
-  }));
+  return entries.items.map((item) => {
+    return {
+      id: item.sys.id,
+      title: item.fields.title as string,
+      brief: item.fields.brief as string,
+      story: item.fields.story as string,
+      date: item.fields.date as string,
+      writer: item.fields.writer as string,
+    };
+  });
 }
 
-// Fetch a single post by ID
 export async function getPost(id: string): Promise<Post | null> {
   try {
-    const entry = await client.getEntry(id);
+    const entry = await client.getEntry<PostFields>(id);
 
     return {
       id: entry.sys.id,
-      title: entry.fields.title ?? "",
-      brief: entry.fields.brief ?? "",
-      story: entry.fields.story ?? "",
-      date: entry.fields.date ?? "",
-      image: entry.fields.image?.fields.file.url ?? null, // Ensuring image is either a URL or null
-      writer: entry.fields.writer ?? "",
+      title: entry.fields.title as string,
+      brief: entry.fields.brief as string,
+      story: entry.fields.story as string,
+      date: entry.fields.date as string,
+      writer: entry.fields.writer as string,
     };
   } catch (error) {
-    console.error(`Error fetching post with ID: ${id}`, error);
+    console.error(error);
     return null;
   }
 }

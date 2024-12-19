@@ -4,7 +4,7 @@ import type { Post } from './_lib/api';
 import Pagination from './_components/pagination';
 
 type BlogProps = {
-  searchParams: Record<string, string | undefined>; // Explicitly type searchParams
+  searchParams: Record<string, string | undefined>;
 };
 
 export default async function Blog({ searchParams }: BlogProps) {
@@ -24,18 +24,12 @@ export default async function Blog({ searchParams }: BlogProps) {
       <div className="max-w-7xl mx-auto py-12 px-6">
         <h1 className="text-4xl font-bold mb-8 text-center">Latest Blog Posts</h1>
 
-        {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post: Post) => (
             <div
               key={post.id}
               className="bg-white border rounded-lg shadow-lg overflow-hidden"
             >
-              <img
-                src={post.image?.fields.file.url || ''}
-                alt={post.title || 'Post Image'}
-                className="w-full h-48 object-cover"
-              />
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-3 text-gray-800">
                   {post.title}
@@ -48,7 +42,7 @@ export default async function Blog({ searchParams }: BlogProps) {
                   href={`/blog/${post.id}`}
                   className="text-[#10B981] font-medium hover:underline"
                 >
-                  Read More →
+                  Read More
                 </Link>
               </div>
             </div>

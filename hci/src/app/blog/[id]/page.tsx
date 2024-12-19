@@ -17,10 +17,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
     return <h1 className="text-center mt-10 text-red-500">Post Not Found</h1>;
   }
 
-  const { title, image, brief, date, story, writer } = post;
-
-  // Extract the image URL, and fallback to an empty string if image is null or undefined
-  const imageUrl = image?.fields?.file?.url ?? ''; // Use empty string as fallback for null or undefined
+  const { title, brief, date, story, writer } = post;
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
@@ -34,13 +31,6 @@ export default async function BlogPost({ params }: BlogPostProps) {
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
           {title}
         </h1>
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-48 object-cover rounded-md mb-4"
-          />
-        )}
         <p className="text-sm text-gray-400 mb-4">
           By: {writer}
         </p>

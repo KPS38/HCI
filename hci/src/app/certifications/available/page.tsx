@@ -16,13 +16,6 @@ export default async function Certifications() {
             >
               <div className="p-6">
                 <h2 className="text-2xl font-bold mb-2 text-center">{cert.name}</h2>
-                {cert.image && (
-                <img
-                  src={cert.image}
-                  alt={cert.name}
-                  className="mx-auto w-42 h-32 object-cover"
-                />
-              )}
                 <p className="text-gray-600 mb-1">
                   <strong>Provider:</strong> {cert.provider}
                 </p>
