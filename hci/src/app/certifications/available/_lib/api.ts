@@ -1,9 +1,19 @@
-import { createClient, EntrySkeletonType } from "contentful";
+import { createClient, EntrySkeletonType, Asset } from "contentful";
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || "",
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 });
+
+type Image = {
+  fields: {
+    file: {
+      url: string;
+      fileName: string;
+      contentType: string;
+    };
+  };
+};
 
 export type Certification = {
   id: string;
@@ -12,6 +22,7 @@ export type Certification = {
   description: string;
   duration: string;
   price: string;
+  image: Image | null;
 };
 
 type CertificationFields = EntrySkeletonType & {
@@ -20,6 +31,7 @@ type CertificationFields = EntrySkeletonType & {
   description: string;
   duration: string;
   price: string;
+  image: Asset | null;
 };
 
 export async function getCertifications(): Promise<Certification[]> {
@@ -29,6 +41,7 @@ export async function getCertifications(): Promise<Certification[]> {
   });
 
   return entries.items.map((item) => {
+    const image = item.fields.image && typeof item.fields.image === 'object' && 'fields' in item.fields.image ? { fields: { file: (item.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
     return {
       id: item.sys.id,
       name: typeof item.fields.name === "string" ? item.fields.name : "Untitled", // Fallback to "Untitled"
@@ -36,6 +49,7 @@ export async function getCertifications(): Promise<Certification[]> {
       description: typeof item.fields.description === "string" ? item.fields.description : "No description available.",
       duration: typeof item.fields.duration === "string" ? item.fields.duration : "N/A",
       price: typeof item.fields.price === "string" ? item.fields.price : "N/A",
+      image: image,
     };
   });
 }
@@ -44,6 +58,7 @@ export async function getCertifications(): Promise<Certification[]> {
 export async function getCertification(id: string): Promise<Certification | null> {
   try {
     const entry = await client.getEntry<CertificationFields>(id);
+    const image = entry.fields.image && typeof entry.fields.image === 'object' && 'fields' in entry.fields.image ? { fields: { file: (entry.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
 
     return {
       id: entry.sys.id,
@@ -52,6 +67,7 @@ export async function getCertification(id: string): Promise<Certification | null
       description: typeof entry.fields.description === "string" ? entry.fields.description : "",
       duration: typeof entry.fields.duration === "string" ? entry.fields.duration : "",
       price: typeof entry.fields.price === "string" ? entry.fields.price : "",
+      image: image,
     };
   } catch (error) {
     console.error(`Error fetching certification with ID: ${id}`, error);

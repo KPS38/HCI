@@ -14,6 +14,13 @@ export default async function Certifications() {
               key={cert.id}
               className="bg-gray-100 border rounded-lg overflow-hidden shadow-lg "
             >
+              {cert.image && (
+                <img
+                  src={cert.image.fields.file.url}
+                  alt={cert.name}
+                  className="w-40 h-34 object-cover mx-auto py-4"
+                />
+              )}
               <div className="p-6">
                 <h2 className="text-2xl font-bold mb-2 text-center">{cert.name}</h2>
                 <p className="text-gray-600 mb-1">

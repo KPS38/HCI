@@ -10,10 +10,10 @@ export default function Home() {
           max-w-6xl mx-auto mb-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 p-6"
         >
           <div className="mt-16 gap-8 p-4 w-auto h-auto">
-            <h1 className="text-6xl font-extrabold tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight break-words text-center sm:text-left">
               Enterprise Security <span className="text-[#10B981]">Solutions</span>
             </h1>
-            <p className="mt-6 text-xl text-gray-300 max-w-2xl mb-4">
+            <p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
               Protect your digital assets with advanced cybersecurity expertise and continuous monitoring.
             </p>
             <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -25,7 +25,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/about"
-                className="px-6 py-3 bg-[#1e1e1e] border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
+                className="px-6 py-3 bg-[#1e1e1e] border-2 border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
               >
                 About Us
               </Link>
@@ -39,6 +39,7 @@ export default function Home() {
             />
           </div>
         </section>
+
 
         {/* Services Section */}
         <section className="bg-white bg-opacity-90 text-[#1e1e1e] text-left w-full py-20 border-b-2 border-[#1e1e1e] p-6 items-center">

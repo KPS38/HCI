@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Navigation } from "./_components/navigation";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -12,7 +11,6 @@ export default function AboutLayout({
 }) {
   return (
     <section className="pt-16">
-      <Navigation />
       {children}
     </section>
   );
