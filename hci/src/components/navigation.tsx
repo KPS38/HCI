@@ -170,15 +170,24 @@ export function Navigation() {
 
 export function Footer() {
   return (
-    <footer className="bg-[#1e1e1e] text-white py-8">
+    <footer className="bg-[#1e1e1e] text-[#10B981] py-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-center">
           Copyright © {new Date().getFullYear()} cyOps, Inc. All rights reserved.
         </div>
-        <div className="flex space-x-4 text-green-500">
-          <a href="#">Facebook</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">YouTube</a>
+        <div className="flex space-x-4 items-center">
+          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
+            <img className="h-4 w-3"src="./images/facebook.png" alt="Facebook"/>
+          </a>
+          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
+            <img className="h-4 w-4" src="./images/instagram.png" alt="Instagram"/>
+          </a>
+          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
+            <img className="h-4 w-6" src="./images/youtube.png" alt="YouTube"/>
+          </a>
+          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
+            <img className="h-4 w-4" src="./images/linkedin.png" alt="LinkedIn"/>
+          </a>
         </div>
       </div>
     </footer>
