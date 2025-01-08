@@ -32,8 +32,8 @@ export default async function Blog({ searchParams }: BlogProps) {
             >
               {post.image && (
                 <img
-                  src={post.image.fields.file.url}
-                  alt={post.title || 'Post Image'}
+                  src={`https:${post.image.fields.file.url}`}
+                  alt={post.title}
                   className="w-full h-48 object-cover"
                 />
               )}

@@ -9,23 +9,23 @@ export default function Home() {
           className="items-center text-left min-h-screen text-white bg-black bg-opacity-20 bg-center
           max-w-6xl mx-auto mb-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 p-6"
         >
-          <div className="mt-16 gap-8 p-4 w-auto h-auto">
+          <div className="items-center mt-16 gap-8 p-4 w-auto h-auto">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight break-words text-center sm:text-left">
               Enterprise Security <span className="text-[#10B981]">Solutions</span>
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
+            <p className="mt-6 sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
               Protect your digital assets with advanced cybersecurity expertise and continuous monitoring.
             </p>
-            <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+            <div className="mx-4 sm:mx-auto grid grid-cols-1 sm:grid-cols-2">
               <Link
                 href="/services"
-                className="px-6 py-3 bg-[#10B981] text-white font-medium rounded-lg text-center"
+                className="w-48 px-6 py-3 my-4 bg-[#10B981] text-white font-medium rounded-lg text-center"
               >
                 Showcase
               </Link>
               <Link
                 href="/about"
-                className="px-6 py-3 bg-[#1e1e1e] border-2 border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
+                className="w-48 px-6 py-3 my-4 bg-[#1e1e1e] border-2 border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
               >
                 About Us
               </Link>
@@ -42,27 +42,31 @@ export default function Home() {
 
 
         {/* Services Section */}
-        <section className="bg-white bg-opacity-90 text-[#1e1e1e] text-left w-full py-20 border-b-2 border-[#1e1e1e] p-6 items-center">
-          <div className="max-w-4xl max-h-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 bg-white rounded-lg border-t-8 border-[#10B981] p-4">
-            <div className="p-4">
+        <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-center sm:text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white p-6 items-center">
+          <div className="max-w-4xl max-h-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 bg-white dark:bg-[#1e1e1e] rounded-lg border-t-8 border-[#10B981] p-4">
+            <div className="p-4 border-b sm:border-b-0 sm:border-r border-[#1e1e1e] dark:border-white">
               <img
                 src="./images/shield.png"
                 alt="Security Testing Icon"
-                className="mx-auto mb-4 w-16 h-16"
+                className="mx-auto w-16 h-16 sm:w-24 sm:h-24"
               />
-              <h2 className="text-3xl font-bold mb-4">SECURITY TESTING</h2>
-              <p className="text-xl">
+              <div className="h-24 sm:w-32 py-4">
+                <h2 className="text-2xl font-bold">SECURITY TESTING</h2>
+              </div>
+              <p className="sm:text-xl">
                 Identify and mitigate potential threats through rigorous penetration testing and security audits.
               </p>
             </div>
-            <div className="p-4">
+            <div className="p-4 border-b sm:border-b-0 sm:border-r border-[#1e1e1e] dark:border-white">
               <img
                 src="./images/search.png"
                 alt="Vulnerability Assessments Icon"
-                className="mx-auto mb-4 w-16 h-16"
+                className="mx-auto w-16 h-16 sm:w-24 sm:h-24"
               />
-              <h2 className="text-3xl font-bold mb-4">VULNERABILITY ASSESSMENTS</h2>
-              <p className="text-xl">
+              <div className="h-24 sm:w-32 py-4">
+                <h2 className="text-2xl font-bold">VULNERABILITY ASSESSMENTS</h2>
+              </div>
+              <p className="sm:text-xl">
                 Evaluate your systems for weaknesses to ensure a robust security posture.
               </p>
             </div>
@@ -70,10 +74,12 @@ export default function Home() {
               <img
                 src="./images/chip.png"
                 alt="Managed Security Services Icon"
-                className="mx-auto mb-4 w-16 h-16"
+                className="mx-auto w-16 h-16 sm:w-24 sm:h-24"
               />
-              <h2 className="text-3xl font-bold mb-4">MANAGED SECURITY SERVICES</h2>
-              <p className="text-xl">
+              <div className="h-auto w-auto py-4">
+                <h2 className="text-2xl font-bold">MANAGED SECURITY SERVICES</h2>
+              </div>
+              <p className="sm:text-xl">
                 Proactively monitor and protect your infrastructure with 24/7 expert
                 support.
               </p>
@@ -82,11 +88,11 @@ export default function Home() {
         </section>
 
         {/* Certifications Section */}
-        <section className="bg-white bg-opacity-90 text-[#1e1e1e] text-left w-full py-20 border-b-2 border-[#1e1e1e] min-h-screen p-6 items-center">
-          <h2 className="text-4xl font-bold mb-12 text-center">
+        <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white min-h-screen p-6 items-center">
+          <h2 className="text-3xl sm:text-5xl font-bold mb-12 text-center">
             Featured Certifications
           </h2>
-          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 imgSrc: "/images/cos+.png",
@@ -118,19 +124,23 @@ export default function Home() {
             ].map((cert, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-lg border-t-8 border-[#10B981] flex flex-col items-center"
+                className="bg-white dark:bg-[#1e1e1e] p-6 rounded-lg shadow-lg border-t-8 border-[#10B981] flex flex-col items-center sm:items-baseline"
               >
-                <h3 className="text-3xl sm:text-2xl font-semibold mb-8">{cert.title}</h3>
+                <div className="h-24 py-4">
+                  <h3 className="text-2xl sm:text-3xl font-semibold mb-8 text-center sm:text-left">{cert.title}</h3>
+                </div>
+                
                 <img
                   src={cert.imgSrc}
                   alt={cert.altText}
                   className="mx-auto mb-4 w-30 h-24"
                 />
-                
-                <p className="text-xl flex-grow">{cert.description}</p>
+                <div className="sm:h-48 py-4">
+                  <p className="sm:text-xl py-4 text-center sm:text-left">{cert.description}</p>
+                </div>
                 <Link
                   href={cert.link}
-                  className="mt-auto px-4 py-2 bg-[#10B981] text-white font-medium rounded text-center"
+                  className="w-48 mb-6 py-2 bg-[#10B981] text-white font-medium rounded text-center"
                 >
                   {cert.buttonText}
                 </Link>
@@ -140,7 +150,7 @@ export default function Home() {
         </section>
 
         {/* Story Section */}
-        <section className="bg-white bg-opacity-90 text-[#1e1e1e] text-left w-full py-20 border-b-2 border-[#1e1e1e] min-h-screen">
+        <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white min-h-screen">
           <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
             {[
               {
@@ -162,17 +172,17 @@ export default function Home() {
                 link: "/about",
               },
             ].map((story, index) => (
-              <div key={index} className="p-6 mb-6 flex flex-col h-[500px]">
+              <div key={index} className="mx-6 flex flex-col">
                 <img
                   src={story.imgSrc}
                   alt={story.altText}
                   className="mx-auto mb-6 w-128 h-128"
                 />
-                <h2 className="text-3xl font-bold mb-4">{story.title}</h2>
-                <p className="text-xl flex-grow">{story.description}</p>
+                <h2 className="text-xl sm:text-3xl font-bold mb-4">{story.title}</h2>
+                <p className="mb-6 sm:text-xl flex-grow">{story.description}</p>
                 <Link
                   href={story.link}
-                  className="mt-6 px-4 py-2 bg-[#10B981] text-white font-medium rounded text-center"
+                  className="w-48 mb-6 py-2 bg-[#10B981] text-white font-medium rounded text-center"
                 >
                   {story.buttonText}
                 </Link>

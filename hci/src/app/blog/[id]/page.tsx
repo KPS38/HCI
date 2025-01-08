@@ -34,7 +34,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
         </h1>
         {imageUrl && (
           <img
-            src={imageUrl}
+            src={`https:${imageUrl}`}
             alt={title}
             className="w-full h-48 object-cover rounded-md mb-4"
           />
