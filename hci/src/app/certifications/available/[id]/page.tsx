@@ -34,7 +34,7 @@ export default async function CertificationPost({ params }: CertificationProps) 
         </h1>
         {imageUrl && (
           <img
-            src={imageUrl}
+            src={`https:${imageUrl}`}
             alt={name}
             className="w-40 h-34 object-cover mx-auto mb-4"
           />

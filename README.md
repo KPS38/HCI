@@ -29,6 +29,7 @@
 - Link to Assignment 3: [**Assignment 3**](https://cyops.vercel.app/) <!-- Replace with actual URL -->
 - Link to Assignment 4: [**Assignment 4**](assignments/Assignment%204/Main%20page.png) <!-- Replace with actual URL -->
 - Link to Assignment 5: [**Assignment 5**](https://cyops.vercel.app/blog) <!-- Replace with actual URL -->
+- Link to Assignment 6: [**Assignment 6**](assignments/Assignment%206/Figma.mp4) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
 
 

@@ -6,20 +6,33 @@ import { useEffect, useCallback, useState } from 'react';
 
 export default function Home() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
-  const [autoScroll, setAutoScroll] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
   useEffect(() => {
-    if (autoScroll) {
-      const interval = setInterval(() => {
-        scrollNext();
-      }, 8000);
-      return () => clearInterval(interval);
-    }
-  }, [autoScroll, scrollNext]);
+    if (!emblaApi) return;
+    
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+    
+    emblaApi.on('select', onSelect);
+    onSelect();
+    
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      scrollNext();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [scrollNext]);
 
   return (
     <div className="content">
@@ -30,7 +43,7 @@ export default function Home() {
           max-w-6xl mx-auto mb-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 p-6"
         >
           <div className="items-center mt-16 gap-8 p-4 w-auto h-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight break-words text-center sm:text-left">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-center sm:text-left">
               Enterprise Security <span className="text-[#10B981]">Solutions</span>
             </h1>
             <p className="mt-6 sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
@@ -108,11 +121,11 @@ export default function Home() {
         </section>
 
         {/* Certifications Section */}
-        <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white min-h-screen p-6 items-center">
+        <section className="mx-auto bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white min-h-screen p-6 items-center">
           <h2 className="text-3xl sm:text-5xl font-bold mb-12 text-center">
             Featured Certifications
           </h2>
-          <div className="max-w-5xl mx-auto overflow-hidden" ref={emblaRef}>
+          <div className="max-w-4xl mx-auto sm:px-16 overflow-hidden" ref={emblaRef}>
             <div className="flex">
               {[
                 {
@@ -121,7 +134,15 @@ export default function Home() {
                   title: "cyOps Security+",
                   description: "A foundational certification covering essential cybersecurity skills and concepts.",
                   buttonText: "Explore Security+",
-                  link: "/certifications",
+                  link: "/certifications/available",
+                },
+                {
+                  imgSrc: "/images/cs+.png",
+                  altText: "cyOps Security+ Certification",
+                  title: "cyOps Security+",
+                  description: "A foundational certification covering essential cybersecurity skills and concepts.",
+                  buttonText: "Explore Security+",
+                  link: "/certifications/available",
                 },
                 {
                   imgSrc: "/images/cad.png",
@@ -129,7 +150,15 @@ export default function Home() {
                   title: "cyOps Advanced Defender",
                   description: "Focuses on advanced threat detection, incident response, and defensive techniques.",
                   buttonText: "Explore Defender",
-                  link: "/certifications",
+                  link: "/certifications/available",
+                },
+                {
+                  imgSrc: "/images/cad.png",
+                  altText: "cyOps Advanced Defender Certification",
+                  title: "cyOps Advanced Defender",
+                  description: "Focuses on advanced threat detection, incident response, and defensive techniques.",
+                  buttonText: "Explore Defender",
+                  link: "/certifications/available",
                 },
                 {
                   imgSrc: "/images/caa.png",
@@ -137,14 +166,22 @@ export default function Home() {
                   title: "cyOps Advanced Architect",
                   description: "Designed for experts specializing in designing and implementing secure systems and networks.",
                   buttonText: "Explore Architect",
-                  link: "/certifications",
+                  link: "/certifications/available",
+                },
+                {
+                  imgSrc: "/images/caa.png",
+                  altText: "cyOps Advanced Architect Certification",
+                  title: "cyOps Advanced Architect",
+                  description: "Designed for experts specializing in designing and implementing secure systems and networks.",
+                  buttonText: "Explore Architect",
+                  link: "/certifications/available",
                 },
               ].map((cert, index) => (
-                <div key={index} className="embla__slide flex-none w-full sm:w-1/2 p-4">
-                  <div className="p-6 rounded-lg shadow-lg bg-white dark:bg-[#1e1e1e] flex flex-col items-center">
-                    <h3 className="text-2xl font-semibold mb-4">{cert.title}</h3>
-                    <img src={cert.imgSrc} alt={cert.altText} className="w-30 h-24 mb-4" />
-                    <p className="text-xl mb-4">{cert.description}</p>
+                <div key={index} className="embla__slide flex-none w-full sm:w-1/3 mx-4">
+                  <div className="py-6 rounded-lg shadow-lg bg-white dark:bg-[#1e1e1e] flex flex-col items-center mb-4">
+                    <h3 className="text-xl sm:text-2xl w-48 h-8 font-semibold mb-4">{cert.title}</h3>
+                    <img src={cert.imgSrc} alt={cert.altText} className="w-30 h-24 my-4" />
+                    <p className="w-48 h-30 mb-6 py-2 sm:text-xl">{cert.description}</p>
                     <Link href={cert.link}>
                       <p className="bg-[#10B981] text-white py-2 px-4 rounded">{cert.buttonText}</p>
                     </Link>
@@ -152,19 +189,29 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            {/* Navigation Buttons */}
-            <button 
-              className="bg-[#10B981] text-white p-2 rounded"
-              onClick={() => emblaApi && emblaApi.scrollPrev()}
-            >
-              Prev
-            </button>
-            <button 
-              className="bg-[#10B981] text-white p-2 rounded"
-              onClick={() => emblaApi && emblaApi.scrollNext()}
-            >
-              Next
-            </button>
+            <div className="flex items-center justify-between space-x-4">
+              <button 
+                className="bg-[#10B981] text-white w-8 h-8 sm:w-16 sm:h-16 sm:text-3xl rounded-full"
+                onClick={() => emblaApi && emblaApi.scrollPrev()}
+              >
+                &lt;
+              </button>
+              <div className="flex space-x-2">
+                {[...Array(emblaApi ? emblaApi.scrollSnapList().length : 0)].map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-3 h-3 sm:w-5 sm:h-5 rounded-full border border-[#1e1e1e] ${index === selectedIndex ? 'bg-[#10B981]' : 'bg-transparent'}`}
+                    onClick={() => emblaApi && emblaApi.scrollTo(index)}
+                  />
+                ))}
+              </div>
+              <button 
+                className="bg-[#10B981] text-white w-8 h-8 sm:w-16 sm:h-16 sm:text-3xl rounded-full"
+                onClick={() => emblaApi && emblaApi.scrollNext()}
+              >
+                &gt;
+              </button>
+            </div>
           </div>
         </section>
 

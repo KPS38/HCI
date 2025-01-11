@@ -16,9 +16,9 @@ export default async function Certifications() {
             >
               {cert.image && (
                 <img
-                  src={cert.image.fields.file.url}
+                  src={`https:${cert.image.fields.file.url}`}
                   alt={cert.name}
-                  className="w-26 h-32 object-cover mx-auto py-4"
+                  className="w-24 h-32 object-cover mx-auto py-4"
                 />
               )}
               <div className="p-6">
