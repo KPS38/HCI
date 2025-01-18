@@ -3,14 +3,25 @@
 import Link from "next/link";
 import useEmblaCarousel from 'embla-carousel-react'
 import { useEffect, useCallback, useState } from 'react';
+import { getCertifications, Certification } from "./certifications/available/_lib/api";
 
 export default function Home() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+
 
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  useEffect(() => {
+    async function fetchCertifications() {
+      const certs = await getCertifications();
+      setCertifications(certs);
+    }
+    fetchCertifications();
+  }, []);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -49,16 +60,16 @@ export default function Home() {
             <p className="mt-6 sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
               Protect your digital assets with advanced cybersecurity expertise and continuous monitoring.
             </p>
-            <div className="mx-4 sm:mx-auto grid grid-cols-1 sm:grid-cols-2">
+            <div className="items-center sm:mx-auto grid grid-cols-1 sm:grid-cols-2">
               <Link
                 href="/services"
-                className="w-48 px-6 py-3 my-4 bg-[#10B981] text-white font-medium rounded-lg text-center"
+                className="w-48 mx-auto sm:mx-0 px-6 py-3 my-4 bg-[#10B981] text-white font-medium rounded-lg text-center"
               >
                 Showcase
               </Link>
               <Link
                 href="/about"
-                className="w-48 px-6 py-3 my-4 bg-[#1e1e1e] border-2 border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
+                className="w-48 mx-auto sm:mx-0 px-6 py-3 my-4 bg-[#1e1e1e] border-2 border-[#10B981] text-[#10B981] font-medium rounded-lg text-center"
               >
                 About Us
               </Link>
@@ -72,7 +83,6 @@ export default function Home() {
             />
           </div>
         </section>
-
 
         {/* Services Section */}
         <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-center sm:text-left w-full py-20 border-b-2 border-[#1e1e1e] dark:border-white p-6 items-center">
@@ -127,63 +137,16 @@ export default function Home() {
           </h2>
           <div className="max-w-4xl mx-auto sm:px-16 overflow-hidden" ref={emblaRef}>
             <div className="flex">
-              {[
-                {
-                  imgSrc: "/images/cs+.png",
-                  altText: "cyOps Security+ Certification",
-                  title: "cyOps Security+",
-                  description: "A foundational certification covering essential cybersecurity skills and concepts.",
-                  buttonText: "Explore Security+",
-                  link: "/certifications/available",
-                },
-                {
-                  imgSrc: "/images/cs+.png",
-                  altText: "cyOps Security+ Certification",
-                  title: "cyOps Security+",
-                  description: "A foundational certification covering essential cybersecurity skills and concepts.",
-                  buttonText: "Explore Security+",
-                  link: "/certifications/available",
-                },
-                {
-                  imgSrc: "/images/cad.png",
-                  altText: "cyOps Advanced Defender Certification",
-                  title: "cyOps Advanced Defender",
-                  description: "Focuses on advanced threat detection, incident response, and defensive techniques.",
-                  buttonText: "Explore Defender",
-                  link: "/certifications/available",
-                },
-                {
-                  imgSrc: "/images/cad.png",
-                  altText: "cyOps Advanced Defender Certification",
-                  title: "cyOps Advanced Defender",
-                  description: "Focuses on advanced threat detection, incident response, and defensive techniques.",
-                  buttonText: "Explore Defender",
-                  link: "/certifications/available",
-                },
-                {
-                  imgSrc: "/images/caa.png",
-                  altText: "cyOps Advanced Architect Certification",
-                  title: "cyOps Advanced Architect",
-                  description: "Designed for experts specializing in designing and implementing secure systems and networks.",
-                  buttonText: "Explore Architect",
-                  link: "/certifications/available",
-                },
-                {
-                  imgSrc: "/images/caa.png",
-                  altText: "cyOps Advanced Architect Certification",
-                  title: "cyOps Advanced Architect",
-                  description: "Designed for experts specializing in designing and implementing secure systems and networks.",
-                  buttonText: "Explore Architect",
-                  link: "/certifications/available",
-                },
-              ].map((cert, index) => (
+              {certifications.map((cert, index) => (
                 <div key={index} className="embla__slide flex-none w-full sm:w-1/3 mx-4">
                   <div className="py-6 rounded-lg shadow-lg bg-white dark:bg-[#1e1e1e] flex flex-col items-center mb-4">
-                    <h3 className="text-xl sm:text-2xl w-48 h-8 font-semibold mb-4">{cert.title}</h3>
-                    <img src={cert.imgSrc} alt={cert.altText} className="w-30 h-24 my-4" />
-                    <p className="w-48 h-30 mb-6 py-2 sm:text-xl">{cert.description}</p>
-                    <Link href={cert.link}>
-                      <p className="bg-[#10B981] text-white py-2 px-4 rounded">{cert.buttonText}</p>
+                    <h3 className="text-xl sm:text-2xl w-48 h-8 font-semibold mb-4">{cert.name}</h3>
+                    {cert.image && (
+                      <img src={`https:${cert.image.fields.file.url}`} alt={cert.name} className="w-30 h-24 my-4" />
+                    )}
+                    <p className="w-48 h-40 sm:h-60 mb-8 py-2 sm:text-xl">{cert.short}</p>
+                    <Link href={`/certifications/available/${cert.id}`}>
+                      <p className="bg-[#10B981] text-white text-center w-48 py-2 px-4 rounded">Explore</p>
                     </Link>
                   </div>
                 </div>
@@ -191,7 +154,7 @@ export default function Home() {
             </div>
             <div className="flex items-center justify-between space-x-4">
               <button 
-                className="bg-[#10B981] text-white w-8 h-8 sm:w-16 sm:h-16 sm:text-3xl rounded-full"
+                className="bg-[#10B981] text-white w-6 h-6 sm:w-16 sm:h-16 sm:text-3xl rounded-full"
                 onClick={() => emblaApi && emblaApi.scrollPrev()}
               >
                 &lt;

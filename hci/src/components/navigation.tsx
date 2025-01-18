@@ -58,6 +58,17 @@ export function Navigation() {
     setDropdownOpen((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
+/*  const handleSignIn = async () => {
+    const redirectTo = encodeURIComponent(pathname);
+    router.push(`/signin?redirectTo=${redirectTo}`);
+    router.refresh();
+  };
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.refresh();
+  };*/
+  
   return (
     <nav className="bg-gradient-to-r py-2 from-[#1e1e1e] to-[#333333] fixed top-0 left-0 w-full z-50">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12">

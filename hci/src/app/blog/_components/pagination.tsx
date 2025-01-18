@@ -5,17 +5,19 @@ type PaginationProps = {
   pagesCount: number;
 };
 
-export default function Pagination(pagination: PaginationProps) {
-  const { currentPage, pagesCount } = pagination;
+export default function Pagination({ currentPage, pagesCount }: PaginationProps) {
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === pagesCount;
+
+  const previousPageUrl = isFirstPage ? "#" : `/blog?page=${currentPage - 1}`;
+  const nextPageUrl = isLastPage ? "#" : `/blog?page=${currentPage + 1}`;
 
   return (
     <div className="w-full mb-6">
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 flex justify-between items-center">
         <Link
-          href={`/blog?page=${currentPage - 1}`}
-          className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+          href={previousPageUrl}
+          className={`px-4 py-2 w-24 text-center rounded-md transition-colors duration-200 ${
             isFirstPage
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -24,14 +26,13 @@ export default function Pagination(pagination: PaginationProps) {
         >
           Previous
         </Link>
-        <p className="text-gray-700">
-          Page{" "}
-          <span className="font-semibold text-gray-900">{currentPage}</span> of{" "}
-          <span className="font-semibold text-gray-900">{pagesCount}</span>
+        <p className="text-gray-700 text-center">
+          Page <span className="text-[#1e1e1e]">{currentPage}</span> of{" "}
+          <span className="[#1e1e1e]">{pagesCount}</span>
         </p>
         <Link
-          href={`/blog?page=${currentPage + 1}`}
-          className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+          href={nextPageUrl}
+          className={`px-4 py-2 w-24 text-center rounded-md transition-colors duration-200 ${
             isLastPage
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"

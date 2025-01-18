@@ -3,8 +3,8 @@ import { createClient, Entry, EntrySkeletonType, Asset } from 'contentful';
 dotenv.config();
 
 const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN!,
 });
 
 type PagingInfo = {
@@ -43,24 +43,46 @@ type PostFields = EntrySkeletonType & {
 
 export type PostEntry = Entry<PostFields>;
 
-export async function getPostsCount(): Promise<number> {
-  const entries = await client.getEntries({
+export async function getPostsCount(filters: { startDate?: string; endDate?: string } = {}): Promise<number> {
+  const query: Record<string, unknown> = {
     content_type: 'post',
     limit: 1,
-  });
+  };
+
+  // Apply date filters if provided
+  if (filters.startDate) {
+    query['fields.date[gte]'] = filters.startDate;
+  }
+  if (filters.endDate) {
+    query['fields.date[lte]'] = filters.endDate;
+  }
+
+  const entries = await client.getEntries(query);
   return entries.total;
 }
 
 export async function getPosts({
   _start = 0,
   _limit = 10,
-}: PagingInfo): Promise<Post[]> {
-  const entries = await client.getEntries<PostFields>({
+  startDate,
+  endDate,
+  sort = '-fields.date'
+}: PagingInfo & { startDate?: string; endDate?: string; sort?: 'fields.date' | '-fields.date' }): Promise<Post[]> {
+  const query: Record<string, unknown> = {
     content_type: 'post',
     skip: _start,
     limit: _limit,
-    order: ['-fields.date'],
-  });
+    order: [sort],
+  };
+
+  if (startDate) {
+    query['fields.date[gte]'] = startDate;
+  }
+  if (endDate) {
+    query['fields.date[lte]'] = endDate;
+  }
+
+  const entries = await client.getEntries<PostFields>(query);
 
   return entries.items.map((item) => {
     const image = item.fields.image && typeof item.fields.image === 'object' && 'fields' in item.fields.image ? { fields: { file: (item.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;

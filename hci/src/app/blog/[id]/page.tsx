@@ -14,14 +14,14 @@ export default async function BlogPost({ params }: BlogPostProps) {
   const post = await getPost(params.id);
 
   if (!post) {
-    return <h1 className="text-center mt-10 text-red-500">Post Not Found</h1>;
+    return <h1 className="text-center mt-10 text-white">Post Not Found</h1>;
   }
 
   const { title, image, brief, date, story, writer } = post;
   const imageUrl = image?.fields.file.url ?? '';
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-10">
+    <main className="flex min-h-screen flex-col items-center p-10 bg-white bg-opacity-90">
       <article className="w-full max-w-2xl bg-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
         <Link
           href="/blog"
