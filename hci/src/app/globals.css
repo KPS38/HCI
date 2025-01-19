@@ -14,10 +14,19 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  background-image: url("/images/matrix.webp"); /* Path to your GIF */
-  background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: "JetBrains Mono", monospace;
   margin: 0;
+}
+
+.backgroundVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none; /* Ensure the video does not interfere with page interactions */
 }

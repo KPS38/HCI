@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 type Page = {
   title: string;
@@ -11,7 +12,6 @@ type Page = {
 };
 
 const pages: Page[] = [
-  { title: "Home", path: "/" },
   {
     title: "Services",
     path: "/services",
@@ -45,68 +45,57 @@ const pages: Page[] = [
 
 export function Navigation() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState<{ [key: string]: boolean }>({});
-
-  useEffect(() => {
-    // Reset all open sidebars when navigating to a new page
-    setMenuOpen(false);
-    setDropdownOpen({});
-  }, [pathname]);
+  const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
 
   const toggleDropdown = (title: string) => {
-    setDropdownOpen((prev) => ({ ...prev, [title]: !prev[title] }));
+    setMenuOpen((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
-/*  const handleSignIn = async () => {
-    const redirectTo = encodeURIComponent(pathname);
-    router.push(`/signin?redirectTo=${redirectTo}`);
-    router.refresh();
+  const closeMobileMenu = () => {
+    setMenuOpen({});
   };
 
-  const handleSignOut = async () => {
-    await authClient.signOut();
-    router.refresh();
-  };*/
-  
   return (
-    <nav className="bg-gradient-to-r py-2 from-[#1e1e1e] to-[#333333] fixed top-0 left-0 w-full z-50">
+    <nav className="bg-gradient-to-b from-black to-[#1e1e1e] border-b border-black fixed top-0 left-0 w-full z-50">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12">
-        <div className="flex items-center space-x-2 h-16">
+        <div className="flex items-center h-16">
           <Link href="/">
             <img src="/images/icon.png" alt="Logo" className="h-12" />
           </Link>
         </div>
 
-        {/* Hamburger Menu */}
         <button
           className="md:hidden text-white text-2xl items-center"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => ({ ...prev, mainMenu: !prev.mainMenu }))}
         >
           ☰
         </button>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-6 items-center">
+        <div className="hidden md:flex items-center w-full justify-end relative">
           {pages.map((page, index) => (
-            <div key={index} className="relative group">
+            <div
+              key={index}
+              className="text-center relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300"
+            >
               <Link
                 href={page.path}
-                className={`text-white text-base font-normal p-8 hover:text-[#10B981] transition duration-300`}
+                className={`block text-white text-base w-40 py-8 font-normal hover:text-[#10B981] transition duration-300`}
               >
                 {page.title}
               </Link>
               {page.subPages && (
-                <div className="absolute hidden group-hover:block bg-gradient-to-r from-[#1e1e1e] to-[#333333] text-white shadow-lg mt-6 rounded-b-md w-auto">
-                  {page.subPages.map((subPage, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      href={subPage.path}
-                      className="block px-4 py-2 border-t-2 border-[#10B981] hover:text-[#10B981] transition duration-300"
-                    >
-                      {subPage.title}
-                    </Link>
-                  ))}
+                <div className="hidden group-hover:block absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
+                  <div className="max-w-screen-xl mx-auto">
+                    {page.subPages.map((subPage, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        href={subPage.path}
+                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full"
+                      >
+                        {subPage.title}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -114,26 +103,27 @@ export function Navigation() {
 
           <Link
             href="/signin"
-            className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+            className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
           >
             Sign In
           </Link>
         </div>
+
       </div>
 
       {/* Mobile Navigation */}
-      {menuOpen && (
-        <div className="bg-gradient-to-r from-[#1e1e1e] to-[#333333] text-white py-4 px-8 md:hidden relative">
+      {menuOpen.mainMenu && (
+        <div className="absolute top-16 left-0 w-full bg-gradient-to-b from-black to-[#1e1e1e] text-white py-4 px-8 md:hidden">
           {pages.map((page, index) => (
             <div key={index} className="flex flex-col mb-4">
               {/* Main section */}
               <div className="flex items-center justify-between">
                 <Link
                   href={page.path}
-                  className={`text-base font-normal hover:text-[#10B981] ${
+                  className={`block text-base font-normal hover:text-[#10B981] ${
                     pathname === page.path ? "font-bold text-[#10B981]" : ""
                   }`}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={closeMobileMenu}
                 >
                   {page.title}
                 </Link>
@@ -143,20 +133,20 @@ export function Navigation() {
                     className="text-white text-xl"
                     onClick={() => toggleDropdown(page.title)}
                   >
-                    {dropdownOpen[page.title] ? "▾" : "▸"}
+                    {menuOpen[page.title] ? "▾" : "▸"}
                   </button>
                 )}
               </div>
 
               {/* Subpages Dropdown */}
-              {dropdownOpen[page.title] && page.subPages && (
+              {menuOpen[page.title] && page.subPages && (
                 <div className="pl-4 mt-2">
                   {page.subPages.map((subPage, subIndex) => (
                     <Link
                       key={subIndex}
                       href={subPage.path}
-                      className="block text-base font-normal hover:text-[#10B981]"
-                      onClick={() => setMenuOpen(false)}
+                      className="block text-base font-normal hover:text-[#10B981] py-1"
+                      onClick={closeMobileMenu}
                     >
                       {subPage.title}
                     </Link>
@@ -169,35 +159,60 @@ export function Navigation() {
           <Link
             href="/signin"
             className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMobileMenu}
           >
             Sign In
           </Link>
         </div>
       )}
+
     </nav>
   );
 }
 
 export function Footer() {
   return (
-    <footer className="bg-[#1e1e1e] text-[#10B981] py-8">
+    <footer className="bg-gradient-to-b from-[#1e1e1e] to-black text-[#10B981] border-t border-black py-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <div className="text-sm text-center">
           Copyright © {new Date().getFullYear()} cyOps, Inc. All rights reserved.
         </div>
         <div className="flex space-x-4 items-center">
           <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
-            <img className="h-4 w-3"src="./images/facebook.png" alt="Facebook"/>
+            <Image
+              src="/images/facebook.png"
+              alt="Facebook"
+              width={16}
+              height={16}
+              className="h-4 w-3"
+            />
           </a>
-          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
-            <img className="h-4 w-4" src="./images/instagram.png" alt="Instagram"/>
+          <a href="https://www.youtube.com/watch?v=ctaipAQ_Sb0">
+            <Image
+              src="/images/instagram.png"
+              alt="Instagram"
+              width={16}
+              height={16}
+              className="h-4 w-4"
+            />
           </a>
-          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
-            <img className="h-4 w-6" src="./images/youtube.png" alt="YouTube"/>
+          <a href="https://www.youtube.com/watch?v=pgiN60dekIs">
+            <Image
+              src="/images/youtube.png"
+              alt="YouTube"
+              width={24}
+              height={16}
+              className="h-4 w-6"
+            />
           </a>
-          <a href="https://www.youtube.com/watch?v=xbS0tJ6S4Xg">
-            <img className="h-4 w-4" src="./images/linkedin.png" alt="LinkedIn"/>
+          <a href="https://www.youtube.com/watch?v=OeLQOfb6IBU">
+            <Image
+              src="/images/linkedin.png"
+              alt="LinkedIn"
+              width={16}
+              height={16}
+              className="h-4 w-4"
+            />
           </a>
         </div>
       </div>
