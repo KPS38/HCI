@@ -15,21 +15,10 @@ const pages: Page[] = [
   {
     title: "Services",
     path: "/services",
-    subPages: [
-      { title: "Security Testing", path: "/services/security-testing" },
-      { title: "Vulnerability Assessments", path: "/services/vulnerability-assessments" },
-      { title: "Managed Security Services", path: "/services/managed-security-services" },
-      { title: "Custom Security Solutions", path: "/services/custom-security-solutions" },
-    ],
   },
   {
     title: "Certifications",
     path: "/certifications",
-    subPages: [
-      { title: "Available Certifications", path: "/certifications/available" },
-      { title: "Exam Scheduling and Pricing", path: "/certifications/exam" },
-      { title: "Certification Success Stories", path: "/certifications/stories" },
-    ],
   },
   { title: "Blog", path: "/blog" },
   {

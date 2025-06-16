@@ -5,7 +5,7 @@ import Image from "next/image";
 import Head from "next/head";
 import useEmblaCarousel from 'embla-carousel-react'
 import { useEffect, useCallback, useState } from 'react';
-import { getCertifications, Certification } from "./certifications/available/_lib/api";
+import { getCertifications, Certification } from "./certifications/_lib/api";
 
 export default function Home() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
