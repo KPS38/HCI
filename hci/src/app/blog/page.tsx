@@ -6,6 +6,7 @@ import type { Post } from './_lib/api';
 import Pagination from './_components/pagination';
 import FilterMenu from './_components/FilterMenu';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 type BlogProps = {
   searchParams: {
@@ -56,9 +57,11 @@ export default function Blog({ searchParams }: BlogProps) {
                   {posts.map((post: Post) => (
                     <div key={post.id} className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden">
                       {post.image && (
-                        <img
+                        <Image
                           src={`https:${post.image.fields.file.url}`}
                           alt={post.title}
+                          width={400}
+                          height={250}
                           className="w-full h-48 object-cover"
                         />
                       )}

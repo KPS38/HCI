@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { supabase } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
 
 type Page = {
   title: string;
@@ -35,6 +37,24 @@ const pages: Page[] = [
 export function Navigation() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user ?? null);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    setUser(null);
+  }
 
   const toggleDropdown = (title: string) => {
     setMenuOpen((prev) => ({ ...prev, [title]: !prev[title] }));
@@ -49,7 +69,7 @@ export function Navigation() {
       <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12">
         <div className="flex items-center h-16">
           <Link href="/">
-            <img src="/images/icon.png" alt="Logo" className="h-12" />
+            <Image src="/images/icon.png" alt="Logo" width={48} height={48} className="h-12 w-12" />
           </Link>
         </div>
 
@@ -90,14 +110,30 @@ export function Navigation() {
             </div>
           ))}
 
-          <Link
-            href="/signin"
-            className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
-          >
-            Sign In
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                className="block text-white text-base w-40 py-8 font-bold hover:text-[#10B981] border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 text-center"
+              >
+                Account
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/signin"
+              className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
-
       </div>
 
       {/* Mobile Navigation */}
@@ -145,16 +181,33 @@ export function Navigation() {
             </div>
           ))}
 
-          <Link
-            href="/signin"
-            className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
-            onClick={closeMobileMenu}
-          >
-            Sign In
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                className="block text-[#10B981] text-base font-bold py-2 px-4 rounded hover:bg-[#10B981] hover:text-white transition duration-300 text-center"
+                onClick={closeMobileMenu}
+              >
+                Account
+              </Link>
+              <button
+                onClick={() => { handleSignOut(); closeMobileMenu(); }}
+                className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/signin"
+              className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+              onClick={closeMobileMenu}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       )}
-
     </nav>
   );
 }

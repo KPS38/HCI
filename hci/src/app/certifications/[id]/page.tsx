@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getCertification } from '../_lib/api';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: "Certification",
@@ -33,9 +34,11 @@ export default async function CertificationPost({ params }: CertificationProps) 
           {name}
         </h1>
         {imageUrl && (
-          <img
+          <Image
             src={`https:${imageUrl}`}
             alt={name}
+            width={400}
+            height={250}
             className="w-40 h-34 object-cover mx-auto mb-4"
           />
         )}

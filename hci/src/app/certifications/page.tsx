@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCertifications, Certification } from "./_lib/api";
 
 export default async function Certifications() {
@@ -15,10 +16,12 @@ export default async function Certifications() {
               className="bg-gray-100 dark:bg-[#1e1e1e] border rounded-lg overflow-hidden shadow-lg "
             >
               {cert.image && (
-                <img
+                <Image
                   src={`https:${cert.image.fields.file.url}`}
                   alt={cert.name}
-                  className="w-30 h-32 object-cover mx-auto py-4"
+                  width={270}
+                  height={120}
+                  className="w-[270px] h-[120px] object-contain mx-auto py-4"
                 />
               )}
               <div className="p-6">

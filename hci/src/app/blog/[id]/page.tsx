@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getPost } from '../_lib/api';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: "Blog Post",
@@ -33,9 +34,11 @@ export default async function BlogPost({ params }: BlogPostProps) {
           {title}
         </h1>
         {imageUrl && (
-          <img
+          <Image
             src={`https:${imageUrl}`}
             alt={title}
+            width={400}
+            height={250}
             className="w-full h-48 object-cover rounded-md mb-4"
           />
         )}
