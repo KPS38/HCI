@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
@@ -41,6 +41,7 @@ const dashboardMenu: Page = {
 
 export function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const [user, setUser] = useState<User | null>(null);
 
@@ -59,6 +60,13 @@ export function Navigation() {
   async function handleSignOut() {
     await supabase.auth.signOut();
     setUser(null);
+    // Clear all session data (basket, discount, etc.)
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("basket");
+      localStorage.removeItem("basket_discount");
+      // Add any other session keys you want to clear here
+    }
+    router.push("/");
   }
 
   const toggleDropdown = (title: string) => {
@@ -78,29 +86,52 @@ export function Navigation() {
           </Link>
         </div>
 
-        <button
-          className={`md:hidden text-2xl items-center transition-colors ${
-            menuOpen.mainMenu ? "text-[#10B981]" : "text-white"
-          }`}
-          onClick={() => setMenuOpen((prev) => ({ ...prev, mainMenu: !prev.mainMenu }))}
-        >
-          ☰
-        </button>
+        {/* Basket icon - only show on mobile */}
+        <div className="flex items-center md:hidden">
+          <Link
+            href="/basket"
+            className="flex items-center justify-center mr-2"
+            title="Basket"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 text-white hover:text-[#10B981] transition-colors"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7a1 1 0 00.9 1.3h12.2a1 1 0 00.9-1.3L17 13M7 13V6a1 1 0 011-1h9a1 1 0 011 1v7" />
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+            </svg>
+          </Link>
+          <button
+            className={`md:hidden text-2xl items-center transition-colors ${
+              menuOpen.mainMenu ? "text-[#10B981]" : "text-white"
+            }`}
+            onClick={() => setMenuOpen((prev) => ({ ...prev, mainMenu: !prev.mainMenu }))}
+          >
+            ☰
+          </button>
+        </div>
 
+        {/* Desktop navigation */}
         <div className="hidden md:flex items-center w-full justify-center relative">
           {pages.map((page, index) => (
             <div
               key={index}
-              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"
+              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center cursor-pointer"
               style={{ minWidth: 0 }}
+              onClick={() => window.location.href = page.path}
+              tabIndex={0}
+              role="button"
             >
-              <div className="flex items-center justify-center">
-                <Link
-                  href={page.path}
+              <div className="flex items-center justify-center w-full h-full">
+                <span
                   className={`block text-white text-center w-full py-8 font-normal hover:text-[#10B981] transition duration-300`}
                 >
                   {page.title}
-                </Link>
+                </span>
                 {page.subPages && (
                   <button
                     type="button"
@@ -130,6 +161,24 @@ export function Navigation() {
             </div>
           ))}
 
+          {/* Basket icon for desktop */}
+          <Link
+            href="/basket"
+            className="flex items-center justify-center ml-4 mr-2"
+            title="Basket"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 text-white hover:text-[#10B981] transition-colors"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7a1 1 0 00.9 1.3h12.2a1 1 0 00.9-1.3L17 13M7 13V6a1 1 0 011-1h9a1 1 0 011 1v7" />
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+            </svg>
+          </Link>
           {user && (
             <div
               className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"

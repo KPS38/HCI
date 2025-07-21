@@ -1,18 +1,61 @@
+'use client'
 import Link from 'next/link';
-import type { Metadata } from 'next';
 import { getCertification } from '../_lib/api';
 import Image from 'next/image';
-
-export const metadata: Metadata = {
-  title: "Certification",
-};
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 type CertificationProps = {
   params: { id: string };
 };
 
-export default async function CertificationPost({ params }: CertificationProps) {
-  const post = await getCertification(params.id);
+export default function CertificationPost({ params }: CertificationProps) {
+  const [post, setPost] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    getCertification(params.id).then(setPost);
+  }, [params.id]);
+
+  // Move basket state initialization inside useEffect to avoid SSR issues
+  const [basket, setBasket] = useState<{ id: string; name: string; price: string; imageUrl?: string }[]>([]);
+  const [quantity, setQuantity] = useState<number>(1);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("basket");
+      if (stored) setBasket(JSON.parse(stored));
+    }
+  }, []);
+
+  function addItem(item: { id: string; name: string; price: string; imageUrl?: string; quantity: number }) {
+    // Check if item exists, increment quantity if so
+    const found = basket.find(b => b.id === item.id);
+    let updated;
+    if (found) {
+      updated = basket.map(b =>
+        b.id === item.id ? { ...b, quantity: (b.quantity ?? 1) + item.quantity } : b
+      );
+    } else {
+      updated = [...basket, { ...item, quantity: item.quantity }];
+    }
+    setBasket(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("basket", JSON.stringify(updated));
+    }
+  }
+
+  function handleAddToCart() {
+    const imageUrl = post.image?.fields.file.url ?? '';
+    addItem({
+      id: post.id,
+      name: post.name,
+      price: post.price,
+      imageUrl: imageUrl ? `https:${imageUrl}` : undefined,
+      quantity,
+    });
+    router.push("/basket");
+  }
 
   if (!post) {
     return <h1 className="text-center mt-10 text-3xl text-white">Certification Not Found</h1>;
@@ -63,13 +106,21 @@ export default async function CertificationPost({ params }: CertificationProps) 
           </div>
         </div>
         <p className="text-gray-700 dark:text-gray-300 mt-2">{description}</p>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end items-center gap-4 mt-6">
+          <input
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={e => setQuantity(Number(e.target.value))}
+            className="w-20 px-2 py-2 border rounded text-black dark:text-white bg-white dark:bg-[#232323]"
+          />
           <button
             type="button"
             className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white font-bold px-5 py-2 rounded-lg shadow transition-colors"
             title="Add to cart"
+            onClick={handleAddToCart}
           >
-            <span>Add</span>
+            <span>Add </span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7a1 1 0 00.9 1.3h12.2a1 1 0 00.9-1.3L17 13M7 13V6a1 1 0 011-1h9a1 1 0 011 1v7" />
               <circle cx="9" cy="21" r="1" />
