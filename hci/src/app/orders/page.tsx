@@ -1,21 +1,40 @@
 'use client'
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Image from "next/image";
+import type { User } from "@supabase/supabase-js";
+
+type OrderItem = {
+  id: string;
+  name: string;
+  price: string;
+  imageUrl?: string;
+  quantity: number;
+};
+
+type Order = {
+  id: string;
+  user_id: string;
+  items: OrderItem[];
+  total: number;
+  discount?: number;
+  created_at: string;
+};
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchOrders() {
       const { data: auth } = await supabase.auth.getUser();
-      const user = auth?.user;
+      const user: User | null = auth?.user;
       if (!user) {
         setOrders([]);
         setLoading(false);
         return;
       }
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("orders")
         .select("*")
         .eq("user_id", user.id)
@@ -50,23 +69,23 @@ export default function OrdersPage() {
                 </div>
                 <div className="mb-2">
                   <span className="font-semibold text-black dark:text-white">Total:</span> <span className="text-black dark:text-white">{Number(order.total).toFixed(2)}€</span>
-                  {order.discount > 0 && (
+                  {order.discount && order.discount > 0 && (
                     <span className="ml-2 text-[#10B981] font-bold">(-{order.discount}% applied)</span>
                   )}
                 </div>
                 <div>
                   <span className="font-semibold text-black dark:text-white">Items:</span>
                   <ul className="ml-4 list-disc">
-                    {order.items.map((item: any, idx: number) => (
+                    {order.items.map((item, idx) => (
                       <li key={idx}>
                         <span className="font-bold text-black dark:text-white">{item.name}</span> <span className="text-black dark:text-white">&times;{item.quantity} ({item.price})</span>
                         {item.imageUrl && (
-                          <img
+                          <Image
                             src={item.imageUrl}
                             alt={item.name}
                             width={32}
                             height={32}
-                            style={{ display: "inline-block", marginLeft: 8, verticalAlign: "middle", borderRadius: 4 }}
+                            className="inline-block ml-2 align-middle rounded"
                           />
                         )}
                       </li>

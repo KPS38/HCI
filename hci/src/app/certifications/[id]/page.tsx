@@ -4,21 +4,23 @@ import { getCertification } from '../_lib/api';
 import Image from 'next/image';
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import type { Certification } from "../_lib/api";
 
 type CertificationProps = {
   params: { id: string };
 };
 
 export default function CertificationPost({ params }: CertificationProps) {
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<Certification | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     getCertification(params.id).then(setPost);
   }, [params.id]);
 
-  // Move basket state initialization inside useEffect to avoid SSR issues
-  const [basket, setBasket] = useState<{ id: string; name: string; price: string; imageUrl?: string }[]>([]);
+  const [basket, setBasket] = useState<
+    { id: string; name: string; price: string; imageUrl?: string; quantity?: number }[]
+  >([]);
   const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function CertificationPost({ params }: CertificationProps) {
   }
 
   function handleAddToCart() {
+    if (!post) return;
     const imageUrl = post.image?.fields.file.url ?? '';
     addItem({
       id: post.id,

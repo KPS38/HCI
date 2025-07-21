@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 
 type BasketItem = {
   id: string;
@@ -15,9 +16,9 @@ type BasketItem = {
 
 export default function BasketPage() {
   const [items, setItems] = useState<BasketItem[]>([]);
-  const [voucher, setVoucher] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [user, setUser] = useState<any>(null);
+  const [voucher, setVoucher] = useState<string>("");
+  const [discount, setDiscount] = useState<number>(0);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   function applyVoucher() {
@@ -49,7 +50,7 @@ export default function BasketPage() {
       const stored = localStorage.getItem("basket");
       if (stored) {
         // Upgrade old basket format if needed
-        const parsed: any[] = JSON.parse(stored);
+        const parsed: BasketItem[] = JSON.parse(stored);
         const upgraded = parsed.map(item =>
           item.quantity ? item : { ...item, quantity: 1 }
         );

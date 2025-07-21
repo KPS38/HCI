@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 
 export default function CheckoutPage() {
   const [name, setName] = useState("");
@@ -59,11 +60,11 @@ export default function CheckoutPage() {
 
     // Get basket from localStorage
     const basketRaw = typeof window !== "undefined" ? localStorage.getItem("basket") : null;
-    const basket = basketRaw ? JSON.parse(basketRaw) : [];
+    const basket: { id: string; name: string; price: string; imageUrl?: string; quantity: number }[] = basketRaw ? JSON.parse(basketRaw) : [];
 
     // Get user
     const { data } = await supabase.auth.getUser();
-    const user = data?.user;
+    const user: User | null = data?.user;
 
     if (!user) {
       setError("You must be signed in to complete purchase.");
@@ -81,7 +82,7 @@ export default function CheckoutPage() {
     setLoading(true);
 
     // Calculate total with discount from basket
-    const total = basket.reduce((sum: number, item: any) => sum + parseFloat(item.price) * item.quantity, 0);
+    const total = basket.reduce((sum: number, item) => sum + parseFloat(item.price) * item.quantity, 0);
     const discountedTotal = discount > 0 ? total * (1 - discount / 100) : total;
 
     // Save order to Supabase
