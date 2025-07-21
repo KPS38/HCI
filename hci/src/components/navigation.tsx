@@ -26,13 +26,18 @@ const pages: Page[] = [
   {
     title: "About Us",
     path: "/about",
-    subPages: [
-      { title: "Our Team", path: "/about/team" },
-      { title: "Careers", path: "/about/careers" },
-      { title: "Contact Us", path: "/about/contact" },
-    ],
   },
 ];
+
+const dashboardMenu: Page = {
+  title: "Dashboard",
+  path: "/dashboard",
+  subPages: [
+    { title: "Account", path: "/account" },
+    { title: "Orders", path: "/orders" },
+    { title: "Sign Out", path: "/signout" }, // We'll handle sign out with a button
+  ],
+};
 
 export function Navigation() {
   const pathname = usePathname();
@@ -74,32 +79,47 @@ export function Navigation() {
         </div>
 
         <button
-          className="md:hidden text-white text-2xl items-center"
+          className={`md:hidden text-2xl items-center transition-colors ${
+            menuOpen.mainMenu ? "text-[#10B981]" : "text-white"
+          }`}
           onClick={() => setMenuOpen((prev) => ({ ...prev, mainMenu: !prev.mainMenu }))}
         >
           ☰
         </button>
 
-        <div className="hidden md:flex items-center w-full justify-end relative">
+        <div className="hidden md:flex items-center w-full justify-center relative">
           {pages.map((page, index) => (
             <div
               key={index}
-              className="text-center relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300"
+              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"
+              style={{ minWidth: 0 }}
             >
-              <Link
-                href={page.path}
-                className={`block text-white text-base w-40 py-8 font-normal hover:text-[#10B981] transition duration-300`}
-              >
-                {page.title}
-              </Link>
+              <div className="flex items-center justify-center">
+                <Link
+                  href={page.path}
+                  className={`block text-white text-center w-full py-8 font-normal hover:text-[#10B981] transition duration-300`}
+                >
+                  {page.title}
+                </Link>
+                {page.subPages && (
+                  <button
+                    type="button"
+                    className="text-white text-xl ml-2"
+                    style={{ background: "none", border: "none", cursor: "pointer" }}
+                    tabIndex={-1}
+                  >
+                    ▸
+                  </button>
+                )}
+              </div>
               {page.subPages && (
-                <div className="hidden group-hover:block absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
-                  <div className="max-w-screen-xl mx-auto">
+                <div className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
+                  <div className="w-full flex flex-col items-center">
                     {page.subPages.map((subPage, subIndex) => (
                       <Link
                         key={subIndex}
                         href={subPage.path}
-                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full"
+                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full text-center"
                       >
                         {subPage.title}
                       </Link>
@@ -110,22 +130,45 @@ export function Navigation() {
             </div>
           ))}
 
-          {user ? (
-            <>
-              <Link
-                href="/account"
-                className="block text-white text-base w-40 py-8 font-bold hover:text-[#10B981] border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 text-center"
-              >
-                Account
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
+          {user && (
+            <div
+              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"
+              style={{ minWidth: 0 }}
+            >
+              <div className="flex items-center justify-center w-full">
+                <button
+                  type="button"
+                  className="block text-white text-base w-full py-8 hover:text-[#10B981] transition duration-300 text-center bg-transparent border-none"
+                >
+                  {dashboardMenu.title}
+                </button>
+              </div>
+              <div className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
+                <div className="w-full flex flex-col items-center">
+                  {dashboardMenu.subPages?.map((subPage, subIndex) =>
+                    subPage.title === "Sign Out" ? (
+                      <button
+                        key={subIndex}
+                        onClick={handleSignOut}
+                        className="block px-4 py-2 w-full text-center hover:text-[#10B981] transition duration-300 bg-transparent border-none"
+                      >
+                        {subPage.title}
+                      </button>
+                    ) : (
+                      <Link
+                        key={subIndex}
+                        href={subPage.path}
+                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full text-center"
+                      >
+                        {subPage.title}
+                      </Link>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          {!user && (
             <Link
               href="/signin"
               className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
@@ -138,16 +181,16 @@ export function Navigation() {
 
       {/* Mobile Navigation */}
       {menuOpen.mainMenu && (
-        <div className="absolute top-16 left-0 w-full bg-gradient-to-b from-black to-[#1e1e1e] text-white py-4 px-8 md:hidden">
+        <div className="absolute top-16 left-0 w-full bg-gradient-to-b from-[#1e1e1e] to-black text-white py-4 px-8 md:hidden flex flex-col items-center">
           {pages.map((page, index) => (
-            <div key={index} className="flex flex-col mb-4">
+            <div key={index} className="flex flex-col mb-4 items-center">
               {/* Main section */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col items-center justify-center w-full">
                 <Link
                   href={page.path}
                   className={`block text-base font-normal hover:text-[#10B981] ${
                     pathname === page.path ? "font-bold text-[#10B981]" : ""
-                  }`}
+                  } text-center`}
                   onClick={closeMobileMenu}
                 >
                   {page.title}
@@ -165,12 +208,12 @@ export function Navigation() {
 
               {/* Subpages Dropdown */}
               {menuOpen[page.title] && page.subPages && (
-                <div className="pl-4 mt-2">
+                <div className="pl-4 mt-2 flex flex-col items-center w-full bg-transparent">
                   {page.subPages.map((subPage, subIndex) => (
                     <Link
                       key={subIndex}
                       href={subPage.path}
-                      className="block text-base font-normal hover:text-[#10B981] py-1"
+                      className="block text-base font-normal hover:text-[#10B981] py-1 text-center w-full"
                       onClick={closeMobileMenu}
                     >
                       {subPage.title}
@@ -181,23 +224,45 @@ export function Navigation() {
             </div>
           ))}
 
-          {user ? (
-            <>
-              <Link
-                href="/account"
-                className="block text-[#10B981] text-base font-bold py-2 px-4 rounded hover:bg-[#10B981] hover:text-white transition duration-300 text-center"
-                onClick={closeMobileMenu}
-              >
-                Account
-              </Link>
+          {user && (
+            <div className="flex flex-col mb-4 items-center w-full">
               <button
-                onClick={() => { handleSignOut(); closeMobileMenu(); }}
-                className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
+                className={`block text-[#10B981] text-base py-2 px-4 font-bold transition duration-300 text-center w-full border-b-2 ${
+                  menuOpen.Dashboard ? "border-[#10B981]" : "border-transparent"
+                } bg-transparent`}
+                onClick={() => setMenuOpen((prev) => ({ ...prev, Dashboard: !prev.Dashboard }))}
+                type="button"
+                style={{ borderRadius: 0 }}
               >
-                Sign Out
+                {dashboardMenu.title} {menuOpen.Dashboard ? "▾" : "▸"}
               </button>
-            </>
-          ) : (
+              {menuOpen.Dashboard && (
+                <div className="pl-2 mt-2 flex flex-col items-center w-full">
+                  {dashboardMenu.subPages?.map((subPage, subIndex) =>
+                    subPage.title === "Sign Out" ? (
+                      <button
+                        key={subIndex}
+                        onClick={() => { handleSignOut(); closeMobileMenu(); }}
+                        className="block text-base font-normal hover:text-[#10B981] py-1 text-center bg-transparent border-none w-full"
+                      >
+                        {subPage.title}
+                      </button>
+                    ) : (
+                      <Link
+                        key={subIndex}
+                        href={subPage.path}
+                        className="block text-base font-normal hover:text-[#10B981] py-1 text-center w-full"
+                        onClick={closeMobileMenu}
+                      >
+                        {subPage.title}
+                      </Link>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          {!user && (
             <Link
               href="/signin"
               className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"

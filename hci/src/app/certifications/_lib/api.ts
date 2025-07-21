@@ -24,6 +24,7 @@ export type Certification = {
   duration: string;
   price: string;
   image: Image | null;
+  difficulty: string; // Optional field for difficulty
 };
 
 type CertificationFields = EntrySkeletonType & {
@@ -52,6 +53,7 @@ export async function getCertifications(): Promise<Certification[]> {
       duration: typeof item.fields.duration === "string" ? item.fields.duration : "N/A",
       price: typeof item.fields.price === "string" ? item.fields.price : "N/A",
       image: image,
+      difficulty: typeof item.fields.difficulty === "string" ? item.fields.difficulty : "N/A",
     };
   });
 }
@@ -71,6 +73,7 @@ export async function getCertification(id: string): Promise<Certification | null
       duration: typeof entry.fields.duration === "string" ? entry.fields.duration : "",
       price: typeof entry.fields.price === "string" ? entry.fields.price : "",
       image: image,
+      difficulty: typeof entry.fields.difficulty === "string" ? entry.fields.difficulty : "",
     };
   } catch (error) {
     console.error(`Error fetching certification with ID: ${id}`, error);

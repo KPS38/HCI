@@ -10,11 +10,19 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -35,6 +43,7 @@ export default function SignUpPage() {
       setSurname("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
     }
   }
 
@@ -67,14 +76,42 @@ export default function SignUpPage() {
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500"
-            required
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500 w-full"
+              required
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#10B981] font-semibold focus:outline-none"
+              onClick={() => setShowPassword(v => !v)}
+              tabIndex={-1}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500 w-full"
+              required
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#10B981] font-semibold focus:outline-none"
+              onClick={() => setShowConfirmPassword(v => !v)}
+              tabIndex={-1}
+            >
+              {showConfirmPassword ? "Hide" : "Show"}
+            </button>
+          </div>
           <button
             type="submit"
             className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
