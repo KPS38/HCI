@@ -11,10 +11,6 @@ export default function FilterMenu({ onFilterChange }: FilterMenuProps) {
   const [search, setSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleFilterChange = () => {
-    onFilterChange({ startDate, endDate, sort, search });
-  };
-
   return (
     <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg p-6 mt-8 mb-4 flex flex-col items-center">
       <h2 className="text-xl font-bold mb-4 text-[#1e1e1e] dark:text-white text-center">Filter Posts</h2>

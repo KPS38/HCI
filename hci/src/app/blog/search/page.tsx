@@ -1,13 +1,12 @@
 'use client'
 
 import Link from 'next/link';
-import { getPosts, getPostsCount } from '../_lib/api';
+import { getPosts } from '../_lib/api'; // Removed getPostsCount import
 import type { Post } from '../_lib/api';
 import Pagination from '../_components/pagination';
 import FilterMenu from '../_components/FilterMenu';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from "next/navigation";
 
 type BlogSearchProps = {
   searchParams?: {
@@ -22,7 +21,6 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
   const currentPage = parseInt(searchParams?.page || '1', 10);
   const PAGE_SIZE = 6;
   const start = (currentPage - 1) * PAGE_SIZE;
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -56,11 +54,6 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
   }, [filters, start]);
   
   const pagesCount = Math.ceil(totalPosts / PAGE_SIZE);
-
-  // Pagination handler
-  function handlePageChange(page: number) {
-    router.push(`/blog/search?page=${page}`);
-  }
 
   return (
     <div className="flex justify-center mx-auto bg-white dark:bg-[#1e1e1e] bg-opacity-90 min-h-screen">
@@ -112,10 +105,10 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
           )}
           {pagesCount > 1 && (
             <div className="mt-10">
+              {/* Remove onPageChange prop if Pagination does not accept it */}
               <Pagination
                 currentPage={currentPage}
                 pagesCount={pagesCount}
-                onPageChange={handlePageChange}
               />
             </div>
           )}
@@ -124,3 +117,4 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
     </div> 
   );
 }
+
