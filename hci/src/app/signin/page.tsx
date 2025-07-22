@@ -55,46 +55,45 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-[#18181b] px-4">
-      <div className="w-full max-w-md bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black">Sign In</h1>
-        {!user ? (
-          <form className="flex flex-col gap-4" onSubmit={handleSignIn}>
+    <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
+        <h1 className="text-3xl font-bold mb-6 text-center text-black dark:text-white">Sign In</h1>
+        <form className="flex flex-col gap-4" onSubmit={handleSignIn}>
+          <input
+            type="email"
+            placeholder="Email address"
+            className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <div className="relative">
             <input
-              type="email"
-              placeholder="Email address"
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] w-full placeholder:text-gray-500 dark:placeholder:text-gray-400"
               required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500 w-full"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#10B981] font-semibold focus:outline-none"
-                onClick={() => setShowPassword(v => !v)}
-                tabIndex={-1}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-            </div>
             <button
-              type="submit"
-              className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#10B981] font-semibold focus:outline-none"
+              onClick={() => setShowPassword(v => !v)}
+              tabIndex={-1}
             >
-              Sign In
+              {showPassword ? "Hide" : "Show"}
             </button>
-          </form>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
+          </div>
+          <button
+            type="submit"
+            className="bg-[#10B981] text-white font-bold py-3 rounded hover:bg-[#059669] transition-colors mt-4"
+          >
+            Sign In
+          </button>
+        </form>
+        {user && (
+          <div className="flex flex-col items-center gap-4 mt-6">
             <p className="text-green-600 text-center">You are signed in as {user.email}</p>
             <button
               onClick={handleSignOut}

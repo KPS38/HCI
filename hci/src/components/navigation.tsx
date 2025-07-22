@@ -44,6 +44,7 @@ export function Navigation() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const [user, setUser] = useState<User | null>(null);
+  const [basketCount, setBasketCount] = useState(0);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -54,6 +55,31 @@ export function Navigation() {
     });
     return () => {
       listener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    function updateBasketCount() {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("basket");
+        if (stored) {
+          try {
+            const items = JSON.parse(stored);
+            setBasketCount(Array.isArray(items) ? items.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0);
+          } catch {
+            setBasketCount(0);
+          }
+        } else {
+          setBasketCount(0);
+        }
+      }
+    }
+    updateBasketCount();
+    window.addEventListener("storage", updateBasketCount);
+    const interval = setInterval(updateBasketCount, 1000);
+    return () => {
+      window.removeEventListener("storage", updateBasketCount);
+      clearInterval(interval);
     };
   }, []);
 
@@ -90,12 +116,12 @@ export function Navigation() {
         <div className="flex items-center md:hidden">
           <Link
             href="/basket"
-            className="flex items-center justify-center mr-2"
+            className="flex items-center justify-center mr-2 relative"
             title="Basket"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-white hover:text-[#10B981] transition-colors"
+              className={`h-7 w-7 ${basketCount > 0 ? "text-[#10B981]" : "text-white"} hover:text-[#10B981] transition-colors`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -104,6 +130,11 @@ export function Navigation() {
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
             </svg>
+            {basketCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#10B981] text-white text-xs font-bold rounded-full px-2 py-0.5 shadow">
+                {basketCount}
+              </span>
+            )}
           </Link>
           <button
             className={`md:hidden text-2xl items-center transition-colors ${
@@ -116,60 +147,61 @@ export function Navigation() {
         </div>
 
         {/* Desktop navigation */}
-        <div className="hidden md:flex items-center w-full justify-center relative">
-          {pages.map((page, index) => (
-            <div
-              key={index}
-              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center cursor-pointer"
-              style={{ minWidth: 0 }}
-              onClick={() => window.location.href = page.path}
-              tabIndex={0}
-              role="button"
-            >
-              <div className="flex items-center justify-center w-full h-full">
-                <span
-                  className={`block text-white text-center w-full py-8 font-normal hover:text-[#10B981] transition duration-300`}
-                >
-                  {page.title}
-                </span>
-                {page.subPages && (
-                  <button
-                    type="button"
-                    className="text-white text-xl ml-2"
-                    style={{ background: "none", border: "none", cursor: "pointer" }}
-                    tabIndex={-1}
+        <div className="hidden md:flex items-center flex-1 justify-end relative max-w-2xl ml-auto">
+          <div className="flex flex-1 justify-end">
+            {pages.map((page, index) => (
+              <div
+                key={index}
+                className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center cursor-pointer"
+                style={{ minWidth: 0, maxWidth: "160px" }}
+                onClick={() => window.location.href = page.path}
+                tabIndex={0}
+                role="button"
+              >
+                <div className="flex items-center justify-center w-full h-full">
+                  <span
+                    className={`block text-white text-center w-full py-8 font-normal hover:text-[#10B981] transition duration-300`}
                   >
-                    ▸
-                  </button>
+                    {page.title}
+                  </span>
+                  {page.subPages && (
+                    <button
+                      type="button"
+                      className="text-white text-xl ml-2"
+                      style={{ background: "none", border: "none", cursor: "pointer" }}
+                      tabIndex={-1}
+                    >
+                      ▸
+                    </button>
+                  )}
+                </div>
+                {page.subPages && (
+                  <div className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
+                    <div className="w-full flex flex-col items-center">
+                      {page.subPages.map((subPage, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subPage.path}
+                          className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full text-center"
+                        >
+                          {subPage.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-              {page.subPages && (
-                <div className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
-                  <div className="w-full flex flex-col items-center">
-                    {page.subPages.map((subPage, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        href={subPage.path}
-                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full text-center"
-                      >
-                        {subPage.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
+            ))}
+          </div>
           {/* Basket icon for desktop */}
           <Link
             href="/basket"
-            className="flex items-center justify-center ml-4 mr-2"
+            className="flex items-center justify-center mx-4 px-4 relative"
             title="Basket"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-white hover:text-[#10B981] transition-colors"
+              className={`h-7 w-7 ${basketCount > 0 ? "text-[#10B981]" : "text-white"} hover:text-[#10B981] transition-colors`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -178,7 +210,15 @@ export function Navigation() {
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
             </svg>
+            {basketCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#10B981] text-white text-xs font-bold rounded-full px-2 py-0.5 shadow">
+                {basketCount}
+              </span>
+            )}
           </Link>
+        </div>
+        {/* User account and sign in button - only show on desktop */}
+        <div className="hidden md:flex items-center">
           {user && (
             <div
               className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"

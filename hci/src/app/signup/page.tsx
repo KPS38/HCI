@@ -48,14 +48,14 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-[#18181b] px-4">
-      <div className="w-full max-w-md bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black">Sign Up</h1>
+    <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
+        <h1 className="text-3xl font-bold mb-6 text-center text-black dark:text-white">Sign Up</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSignUp}>
           <input
             type="text"
             placeholder="Name"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black  placeholder:text-gray-500"
+            className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
             required
             value={name}
             onChange={e => setName(e.target.value)}
@@ -63,7 +63,7 @@ export default function SignUpPage() {
           <input
             type="text"
             placeholder="Surname"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500"
+            className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
             required
             value={surname}
             onChange={e => setSurname(e.target.value)}
@@ -71,7 +71,7 @@ export default function SignUpPage() {
           <input
             type="email"
             placeholder="Email address"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500"
+            className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
             required
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -80,7 +80,7 @@ export default function SignUpPage() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500 w-full"
+              className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] w-full placeholder:text-gray-500 dark:placeholder:text-gray-400"
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
@@ -98,7 +98,7 @@ export default function SignUpPage() {
             <input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black placeholder:text-gray-500 w-full"
+              className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] w-full placeholder:text-gray-500 dark:placeholder:text-gray-400"
               required
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
@@ -114,7 +114,7 @@ export default function SignUpPage() {
           </div>
           <button
             type="submit"
-            className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
+            className="bg-[#10B981] text-white font-bold py-3 rounded hover:bg-[#059669] transition-colors mt-4"
           >
             Sign Up
           </button>

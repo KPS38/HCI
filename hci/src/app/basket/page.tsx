@@ -117,7 +117,7 @@ export default function BasketPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#18181b] py-12 mt-24 px-4 flex flex-col items-center">
+    <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] pt-24 px-4 flex flex-col items-center">
       <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-8 text-center text-black dark:text-white">Your Basket</h1>
         {items.length === 0 ? (
@@ -166,13 +166,13 @@ export default function BasketPage() {
             </ul>
             {/* Voucher input */}
             <div className="flex items-center mb-4 flex-col md:flex-row md:items-center">
-              <div className="w-full md:w-auto flex flex-col md:flex-row">
+              <div className="w-full md:w-auto flex flex-col md:flex-row md:items-center">
                 <input
                   type="text"
                   value={voucher}
                   onChange={e => setVoucher(e.target.value)}
                   placeholder="Voucher code"
-                  className="px-4 py-2 rounded border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] w-48 mr-0 md:mr-4 mb-2 md:mb-0"
+                  className="px-4 py-2 mb-2 rounded border-2 border-gray-300 dark:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   onKeyDown={e => {
                     if (e.key === "Enter") {
                       applyVoucher();
@@ -183,6 +183,7 @@ export default function BasketPage() {
                   type="button"
                   onClick={applyVoucher}
                   className="bg-[#10B981] text-white font-bold px-4 py-2 rounded hover:bg-[#059669] transition-colors w-full md:w-auto"
+                  style={{ minWidth: "100px" }}
                 >
                   Apply
                 </button>

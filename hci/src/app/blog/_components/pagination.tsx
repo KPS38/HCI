@@ -9,8 +9,8 @@ export default function Pagination({ currentPage, pagesCount }: PaginationProps)
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === pagesCount;
 
-  const previousPageUrl = isFirstPage ? "#" : `/blog?page=${currentPage - 1}`;
-  const nextPageUrl = isLastPage ? "#" : `/blog?page=${currentPage + 1}`;
+  const previousPageUrl = isFirstPage ? "#" : `/blog/search?page=${currentPage - 1}`;
+  const nextPageUrl = isLastPage ? "#" : `/blog/search?page=${currentPage + 1}`;
 
   return (
     <div className="w-full mb-6">
