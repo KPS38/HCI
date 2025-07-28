@@ -17,6 +17,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [discount, setDiscount] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Read discount from basket in localStorage if present
@@ -26,6 +27,38 @@ export default function CheckoutPage() {
         setDiscount(Number(storedDiscount));
       }
     }
+  }, []);
+
+  useEffect(() => {
+    // Check for user and basket before rendering form
+    async function checkAccess() {
+      let hasUser = false;
+      let hasBasket = false;
+
+      // Check user
+      const { data } = await supabase.auth.getUser();
+      if (data?.user) hasUser = true;
+
+      // Check basket
+      let basket: { id: string; name: string; price: string; imageUrl?: string; quantity: number }[] = [];
+      if (typeof window !== "undefined") {
+        const basketRaw = localStorage.getItem("basket");
+        basket = basketRaw ? JSON.parse(basketRaw) : [];
+      }
+      if (basket.length > 0) hasBasket = true;
+
+      if (!hasUser) {
+        router.replace("/signin");
+        return;
+      }
+      if (!hasBasket) {
+        router.replace("/basket");
+        return;
+      }
+      setIsReady(true);
+    }
+    checkAccess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -123,6 +156,16 @@ export default function CheckoutPage() {
     "07", "08", "09", "10", "11", "12"
   ];
   const years = Array.from({ length: 12 }, (_, i) => (new Date().getFullYear() + i).toString().slice(-2));
+
+  if (!isReady) {
+    return (
+      <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center py-12 px-4">
+        <div className="max-w-md w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8 text-center">
+          <span className="text-lg text-gray-500 dark:text-gray-400">Checking access...</span>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center py-12 px-4">

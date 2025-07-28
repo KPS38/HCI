@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getCertification } from '../_lib/api';
 import Image from 'next/image';
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import type { Certification } from "../_lib/api";
 
 type CertificationProps = {
@@ -12,36 +11,38 @@ type CertificationProps = {
 
 export default function CertificationPost({ params }: CertificationProps) {
   const [post, setPost] = useState<Certification | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     getCertification(params.id).then(setPost);
   }, [params.id]);
 
-  const [basket, setBasket] = useState<
-    { id: string; name: string; price: string; imageUrl?: string; quantity?: number }[]
-  >([]);
   const [quantity, setQuantity] = useState<number>(1);
 
-  useEffect(() => {
+  // Define the type for basket items directly
+  function addItem(item: { id: string; name: string; price: string; imageUrl?: string; quantity: number }) {
+    let current: { id: string; name: string; price: string; imageUrl?: string; quantity?: number }[] = [];
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("basket");
-      if (stored) setBasket(JSON.parse(stored));
+      if (stored) {
+        try {
+          current = JSON.parse(stored);
+        } catch {
+          current = [];
+        }
+      }
     }
-  }, []);
-
-  function addItem(item: { id: string; name: string; price: string; imageUrl?: string; quantity: number }) {
-    // Check if item exists, increment quantity if so
-    const found = basket.find(b => b.id === item.id);
+    // Check if item already exists, if so, add up quantity
+    const existing = current.find(b => b.id === item.id);
     let updated;
-    if (found) {
-      updated = basket.map(b =>
-        b.id === item.id ? { ...b, quantity: (b.quantity ?? 1) + item.quantity } : b
+    if (existing) {
+      updated = current.map(b =>
+        b.id === item.id
+          ? { ...b, quantity: (b.quantity || 1) + item.quantity }
+          : b
       );
     } else {
-      updated = [...basket, { ...item, quantity: item.quantity }];
+      updated = [...current, { ...item }];
     }
-    setBasket(updated);
     if (typeof window !== "undefined") {
       localStorage.setItem("basket", JSON.stringify(updated));
     }
@@ -57,7 +58,6 @@ export default function CertificationPost({ params }: CertificationProps) {
       imageUrl: imageUrl ? `https:${imageUrl}` : undefined,
       quantity,
     });
-    router.push("/basket");
   }
 
   if (!post) {
@@ -110,13 +110,22 @@ export default function CertificationPost({ params }: CertificationProps) {
         </div>
         <p className="text-gray-700 dark:text-gray-300 mt-2">{description}</p>
         <div className="flex justify-end items-center gap-4 mt-6">
-          <input
-            type="number"
-            min={1}
-            value={quantity}
-            onChange={e => setQuantity(Number(e.target.value))}
-            className="w-20 px-2 py-2 border rounded text-black dark:text-white bg-white dark:bg-[#232323]"
-          />
+          <div className="flex items-center border-2 border-gray-300 dark:border-gray-300 rounded px-2 py-1">
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              className="text-black dark:text-white rounded px-2 font-bold"
+              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              disabled={quantity <= 1}
+            >-</button>
+            <span className="px-4 select-none text-black dark:text-white">{quantity}</span>
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              className="text-black dark:text-white rounded px-2 font-bold"
+              onClick={() => setQuantity(q => q + 1)}
+            >+</button>
+          </div>
           <button
             type="button"
             className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white font-bold px-5 py-2 rounded-lg shadow transition-colors"

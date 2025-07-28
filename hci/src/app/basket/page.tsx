@@ -118,7 +118,7 @@ export default function BasketPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] pt-24 px-4 flex flex-col items-center">
-      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
+      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-4 sm:p-8">
         <h1 className="text-3xl font-bold mb-8 text-center text-black dark:text-white">Your Basket</h1>
         {items.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-12">
@@ -130,49 +130,62 @@ export default function BasketPage() {
         ) : (
           <>
             <ul className="divide-y divide-gray-200 dark:divide-gray-700 mb-6">
+              <li className="flex items-center px-2 pb-2 border-b border-gray-200 dark:border-gray-700 font-semibold text-[#1e1e1e] dark:text-white text-sm uppercase tracking-wide">
+                <div className="w-16"></div>
+                <div className="flex-1">Product</div>
+                <div className="w-32 text-center">Quantity</div>
+                <div className="w-24 text-right">Total</div>
+              </li>
               {items.map(item => (
                 <li key={item.id} className="flex items-center py-4">
-                  {item.imageUrl && (
-                    <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded mr-4" />
-                  )}
-                  <div className="flex-1">
-                    <span className="font-bold text-lg text-black dark:text-white">{item.name}</span>
-                    <span className="block text-gray-600 dark:text-gray-300">
-                      Price: {item.price} &nbsp;|&nbsp; 
-                      <span>
-                        Quantity: 
-                        <input
-                          type="number"
-                          min={1}
-                          value={item.quantity}
-                          onChange={e => updateQuantity(item.id, Number(e.target.value))}
-                          className="ml-2 w-16 px-2 py-1 border rounded text-black dark:text-white bg-white dark:bg-[#232323]"
-                        />
-                        {/* Subtotal for this item */}
-                        <span className="ml-4 text-sm text-[#10B981] font-semibold">
-                          Subtotal: {(getSubtotal(item)).toFixed(2)}€
-                        </span>
-                      </span>
-                    </span>
+                  <div className="w-16 flex-shrink-0 flex items-center justify-center">
+                    {item.imageUrl && (
+                      <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded" />
+                    )}
                   </div>
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="ml-4 text-red-500 hover:underline"
-                  >
-                    Remove
-                  </button>
+                  <div className="flex-1 flex flex-col">
+                    <span className="font-bold text-base text-black dark:text-white">{item.name}</span>
+                    <span className="text-[#10B981] font-semibold text-sm">{item.price}</span>
+                  </div>
+                  <div className="w-32 flex flex-col items-center">
+                    <div className="flex items-center border-2 border-gray-300 dark:border-gray-300 rounded px-2 py-1">
+                      <button
+                        type="button"
+                        aria-label="Decrease quantity"
+                        className="text-black dark:text-white rounded px-2 font-bold"
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        disabled={item.quantity <= 1}
+                      >-</button>
+                      <span className="px-4 text-black dark:text-white select-none">{item.quantity}</span>
+                      <button
+                        type="button"
+                        aria-label="Increase quantity"
+                        className="text-black dark:text-white rounded px-2 font-bold"
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      >+</button>
+                    </div>
+                    <button
+                      onClick={() => removeItem(item.id)}
+                      className="text-xs text-red-500 hover:underline mt-2"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <div className="w-24 text-right font-semibold text-[#10B981]">
+                    {(getSubtotal(item)).toFixed(2)}€
+                  </div>
                 </li>
               ))}
             </ul>
             {/* Voucher input */}
-            <div className="flex items-center mb-4 flex-col md:flex-row md:items-center">
-              <div className="w-full md:w-auto flex flex-col md:flex-row md:items-center">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+              <div className="flex w-full md:w-auto gap-2">
                 <input
                   type="text"
                   value={voucher}
                   onChange={e => setVoucher(e.target.value)}
                   placeholder="Voucher code"
-                  className="px-4 py-2 mb-2 rounded border-2 border-gray-300 dark:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                  className="px-4 py-2 rounded border-2 border-gray-300 dark:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 w-full md:w-48"
                   onKeyDown={e => {
                     if (e.key === "Enter") {
                       applyVoucher();
