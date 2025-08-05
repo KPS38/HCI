@@ -62,7 +62,7 @@ export default function SignInPage() {
           <input
             type="email"
             placeholder="Email address"
-            className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            className="px-4 py-2 rounded border-2 border-gray-300 dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] placeholder:text-gray-500 dark:placeholder:text-gray-400"
             required
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -71,7 +71,7 @@ export default function SignInPage() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] w-full placeholder:text-gray-500 dark:placeholder:text-gray-400"
+              className="px-4 py-2 rounded border-2 border-gray-300 dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] text-black dark:text-white bg-white dark:bg-[#232323] w-full placeholder:text-gray-500 dark:placeholder:text-gray-400"
               required
               value={password}
               onChange={e => setPassword(e.target.value)}

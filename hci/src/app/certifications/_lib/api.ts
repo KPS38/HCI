@@ -31,22 +31,27 @@ type CertificationFields = EntrySkeletonType & {
   name: string;
   provider: string;
   description: string;
+  short: string;
   duration: string;
   price: string;
   image: Asset | null;
+  difficulty: string; // <-- Ensure this is present
 };
 
 export async function getCertifications(): Promise<Certification[]> {
   const entries = await client.getEntries<CertificationFields>({
     content_type: "certification",
-    order: ["fields.name"] as const, // Sort by name
+    order: ["fields.name"] as const,
+    include: 1, // Ensure all fields are loaded
   });
 
   return entries.items.map((item) => {
-    const image = item.fields.image && typeof item.fields.image === 'object' && 'fields' in item.fields.image ? { fields: { file: (item.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
+    const image = item.fields.image && typeof item.fields.image === 'object' && 'fields' in item.fields.image
+      ? { fields: { file: (item.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } }
+      : null;
     return {
       id: item.sys.id,
-      name: typeof item.fields.name === "string" ? item.fields.name : "Untitled", // Fallback to "Untitled"
+      name: typeof item.fields.name === "string" ? item.fields.name : "Untitled",
       provider: typeof item.fields.provider === "string" ? item.fields.provider : "Unknown",
       description: typeof item.fields.description === "string" ? item.fields.description : "No description available.",
       short: typeof item.fields.short === "string" ? item.fields.short : "No description available.",
@@ -58,11 +63,12 @@ export async function getCertifications(): Promise<Certification[]> {
   });
 }
 
-// Fetch a single certification by ID
 export async function getCertification(id: string): Promise<Certification | null> {
   try {
-    const entry = await client.getEntry<CertificationFields>(id);
-    const image = entry.fields.image && typeof entry.fields.image === 'object' && 'fields' in entry.fields.image ? { fields: { file: (entry.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } } : null;
+    const entry = await client.getEntry<CertificationFields>(id, { include: 1 }); // Ensure all fields are loaded
+    const image = entry.fields.image && typeof entry.fields.image === 'object' && 'fields' in entry.fields.image
+      ? { fields: { file: (entry.fields.image as Asset).fields.file as { url: string; fileName: string; contentType: string; } } }
+      : null;
 
     return {
       id: entry.sys.id,

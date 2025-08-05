@@ -162,7 +162,7 @@ export default function Home() {
                         <Image src={`https:${cert.image.fields.file.url}`} alt={cert.name} width={120} height={96} className="w-24 h-24 my-4" />
                       )}
                       <p className="w-48 h-40 sm:h-60 mb-8 py-2 sm:text-xl">{cert.short}</p>
-                      <Link href={`/certifications/available/${cert.id}`}>
+                      <Link href={`/certifications/${cert.id}`}>
                         <p className="group bg-[#10B981] text-white text-center w-48 py-2 px-4 rounded hover:bg-[#0e8e6f] transition-colors duration-300">
                           Explore <span className="hidden group-hover:inline duration-300">→</span>
                         </p>
