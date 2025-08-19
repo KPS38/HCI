@@ -40,8 +40,6 @@ export default function SignInPage() {
       setError(error.message);
       return;
     }
-
-    setSuccess("Signed in successfully!");
     setEmail("");
     setPassword("");
     router.push("/account");

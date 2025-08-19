@@ -35,8 +35,8 @@ export default function FilterMenu({ onFilterChange }: FilterMenuProps) {
                   setSearch(e.target.value);
                   onFilterChange({ startDate, endDate, sort, search: e.target.value });
                 }}
-                placeholder="Search by name or description..."
-                className="px-4 py-2 rounded border-2 border-white dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] w-full bg-white dark:bg-[#18181b] text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                placeholder="Search..."
+                className="px-4 py-2 rounded border dark:border-white focus:outline-none focus:ring-2 focus:ring-[#10B981] w-full bg-white dark:bg-[#18181b] text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
               />
             </div>
             <div className="flex flex-col items-center">
@@ -92,7 +92,7 @@ export default function FilterMenu({ onFilterChange }: FilterMenuProps) {
                 setSearch(e.target.value);
                 onFilterChange({ startDate, endDate, sort, search: e.target.value });
               }}
-              placeholder="Search by name or description..."
+              placeholder="Search..."
               className="border dark:bg-[#1e1e1e] dark:text-white rounded px-4 py-2 w-48 text-[#1e1e1e]"
             />
           </div>

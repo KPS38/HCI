@@ -221,25 +221,36 @@ export function Navigation() {
         <div className="hidden md:flex items-center">
           {user && (
             <div
-              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center"
-              style={{ minWidth: 0 }}
+              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex flex-col items-center"
+              style={{ minWidth: "160px", maxWidth: "160px", width: "160px" }}
             >
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center w-full h-full">
                 <button
                   type="button"
                   className="block text-white text-base w-full py-8 hover:text-[#10B981] transition duration-300 text-center bg-transparent border-none"
+                  style={{ width: "100%" }}
                 >
                   {dashboardMenu.title}
                 </button>
               </div>
-              <div className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10">
+              <div
+                className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10"
+                style={{
+                  minWidth: "160px",
+                  maxWidth: "160px",
+                  width: "160px",
+                  padding: "12px 0",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 <div className="w-full flex flex-col items-center">
                   {dashboardMenu.subPages?.map((subPage, subIndex) =>
                     subPage.title === "Sign Out" ? (
                       <button
                         key={subIndex}
                         onClick={handleSignOut}
-                        className="block px-4 py-2 w-full text-center hover:text-[#10B981] transition duration-300 bg-transparent border-none"
+                        className="block px-6 py-2 w-full text-center hover:text-[#10B981] transition duration-300 bg-transparent border-none text-base"
+                        style={{ whiteSpace: "nowrap" }}
                       >
                         {subPage.title}
                       </button>
@@ -247,7 +258,8 @@ export function Navigation() {
                       <Link
                         key={subIndex}
                         href={subPage.path}
-                        className="block px-4 py-2 hover:text-[#10B981] transition duration-300 w-full text-center"
+                        className="block px-6 py-2 hover:text-[#10B981] transition duration-300 w-full text-center text-base"
+                        style={{ whiteSpace: "nowrap" }}
                       >
                         {subPage.title}
                       </Link>

@@ -25,7 +25,7 @@ export default async function BlogPost({ params }: BlogPostProps) {
     <main className="flex min-h-screen flex-col items-center p-10 bg-white dark:bg-[#1e1e1e] bg-opacity-90">
       <article className="w-full max-w-2xl bg-white dark:bg-[#1e1e1e] border dark:border-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
         <Link
-          href="/blog"
+          href="/blog/search"
           className="inline-flex items-center text-gray-600 dark:text-gray-400 mb-6"
         >
           Back to Blog

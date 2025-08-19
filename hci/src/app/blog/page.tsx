@@ -22,81 +22,83 @@ export default function Blog() {
   }, []);
 
   return (
-    <div className="flex justify-center mx-auto bg-white dark:bg-[#1e1e1e] bg-opacity-90 min-h-screen">
-      <div className="p-6 w-full max-w-6xl mx-auto py-12">
-        <h1 className="text-4xl font-bold mb-8 text-center text-black dark:text-white">Latest News</h1>
+    <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen py-12 px-4">
+      <div className="max-w-5xl mx-auto flex flex-col items-center pt-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323] dark:text-white">
+          Latest News
+        </h1>
         {loading ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-12">Loading...</div>
         ) : recentPosts.length > 0 ? (
           <div className="flex flex-col gap-8 mb-10">
-            {/* First post - full width, image left */}
-            {recentPosts[0] && (
-              <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[300px]">
-                {recentPosts[0].image && (
-                  <Image
-                    src={`https:${recentPosts[0].image.fields.file.url}`}
-                    alt={recentPosts[0].title}
-                    width={600}
-                    height={350}
-                    className="w-full md:w-2/5 h-64 md:h-auto object-cover"
-                    style={{ objectFit: "cover", minHeight: "300px" }}
-                  />
-                )}
-                <div className="p-8 flex flex-col flex-1 justify-center">
-                  <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">{recentPosts[0].title}</h2>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-4">{recentPosts[0].brief}</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-300 mb-4">{new Date(recentPosts[0].date).toLocaleDateString()}</p>
-                  <Link href={`/blog/${recentPosts[0].id}`} className="text-[#10B981] font-medium hover:underline mt-auto">
-                    Read More
-                  </Link>
-                </div>
-              </div>
-            )}
-            {/* Second post - full width, image right */}
-            {recentPosts[1] && (
-              <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row-reverse">
-                {recentPosts[1].image && (
-                  <Image
-                    src={`https:${recentPosts[1].image.fields.file.url}`}
-                    alt={recentPosts[1].title}
-                    width={600}
-                    height={350}
-                    className="w-full md:w-2/5 h-64 md:h-auto object-cover"
-                  />
-                )}
-                <div className="p-8 flex flex-col flex-1">
-                  <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">{recentPosts[1].title}</h2>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-4">{recentPosts[1].brief}</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-300 mb-4">{new Date(recentPosts[1].date).toLocaleDateString()}</p>
-                  <Link href={`/blog/${recentPosts[1].id}`} className="text-[#10B981] font-medium hover:underline mt-auto">
-                    Read More
-                  </Link>
-                </div>
-              </div>
-            )}
-            {/* Next 2 posts - smaller cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {recentPosts.slice(2).map((post: Post) => (
-                <div key={post.id} className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col">
-                  {post.image && (
+            {/* Custom layout: most recent post big block, next 2 left-to-right on mobile */}
+            <div className="flex flex-col md:flex-row gap-8">
+              {/* Most recent post - big block */}
+              {recentPosts[0] && (
+                <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col md:w-2/3 min-h-[340px]">
+                  {recentPosts[0].image && (
                     <Image
-                      src={`https:${post.image.fields.file.url}`}
-                      alt={post.title}
-                      width={400}
-                      height={250}
-                      className="w-full h-48 object-cover"
+                      src={`https:${recentPosts[0].image.fields.file.url}`}
+                      alt={recentPosts[0].title}
+                      width={600}
+                      height={350}
+                      className="w-full h-48 md:h-[340px] object-cover"
+                      style={{ objectFit: "cover" }}
                     />
                   )}
-                  <div className="p-6 flex flex-col flex-1">
-                    <h2 className="text-2xl font-semibold mb-3 text-gray-800 dark:text-white">{post.title}</h2>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">{post.brief}</p>
-                    <p className="text-sm text-gray-400 dark:text-gray-300 mb-4">{new Date(post.date).toLocaleDateString()}</p>
-                    <Link href={`/blog/${post.id}`} className="text-[#10B981] font-medium hover:underline mt-auto">
+                  <div className="p-4 md:p-8 flex flex-col flex-1 justify-center">
+                    <h2 className="text-xl md:text-3xl font-bold mb-2 md:mb-4 text-gray-800 dark:text-white">{recentPosts[0].title}</h2>
+                    <p className="text-gray-600 dark:text-gray-400 mb-2 md:mb-4 line-clamp-3 md:line-clamp-4 text-sm md:text-base">{recentPosts[0].brief}</p>
+                    <p className="text-xs md:text-sm text-gray-400 dark:text-gray-300 mb-2 md:mb-4">{new Date(recentPosts[0].date).toLocaleDateString()}</p>
+                    <Link href={`/blog/${recentPosts[0].id}`} className="text-[#10B981] font-medium hover:underline mt-auto text-sm md:text-base">
                       Read More
                     </Link>
                   </div>
                 </div>
-              ))}
+              )}
+              {/* Next 2 posts - left-to-right on mobile, stacked on desktop */}
+              <div className="flex flex-row md:flex-col gap-4 md:gap-8 md:w-1/3 mt-4 md:mt-0">
+                {recentPosts[1] && (
+                  <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col w-1/2 md:w-full">
+                    {recentPosts[1].image && (
+                      <Image
+                        src={`https:${recentPosts[1].image.fields.file.url}`}
+                        alt={recentPosts[1].title}
+                        width={400}
+                        height={180}
+                        className="w-full h-24 md:h-32 object-cover"
+                      />
+                    )}
+                    <div className="p-2 md:p-4 flex flex-col flex-1">
+                      <h2 className="text-sm md:text-lg font-bold mb-1 md:mb-2 text-gray-800 dark:text-white">{recentPosts[1].title}</h2>
+                      <p className="text-xs md:text-sm text-gray-400 dark:text-gray-300 mb-1 md:mb-2">{new Date(recentPosts[1].date).toLocaleDateString()}</p>
+                      <Link href={`/blog/${recentPosts[1].id}`} className="text-[#10B981] font-medium hover:underline mt-auto text-xs md:text-base">
+                        Read More
+                      </Link>
+                    </div>
+                  </div>
+                )}
+                {recentPosts[2] && (
+                  <div className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg overflow-hidden flex flex-col w-1/2 md:w-full">
+                    {recentPosts[2].image && (
+                      <Image
+                        src={`https:${recentPosts[2].image.fields.file.url}`}
+                        alt={recentPosts[2].title}
+                        width={400}
+                        height={180}
+                        className="w-full h-24 md:h-32 object-cover"
+                      />
+                    )}
+                    <div className="p-2 md:p-4 flex flex-col flex-1">
+                      <h2 className="text-sm md:text-lg font-bold mb-1 md:mb-2 text-gray-800 dark:text-white">{recentPosts[2].title}</h2>
+                      <p className="text-xs md:text-sm text-gray-400 dark:text-gray-300 mb-1 md:mb-2">{new Date(recentPosts[2].date).toLocaleDateString()}</p>
+                      <Link href={`/blog/${recentPosts[2].id}`} className="text-[#10B981] font-medium hover:underline mt-auto text-xs md:text-base">
+                        Read More
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ) : (

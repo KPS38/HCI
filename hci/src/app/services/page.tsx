@@ -1,10 +1,11 @@
 'use client'
+import Image from "next/image";
 
 export default function Services() {
   return (
-    <div className="bg-white dark:bg-[#18181b] min-h-screen py-12 px-4">
+    <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen py-12 px-4">
       <main className="max-w-5xl mx-auto flex flex-col items-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323]">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323] dark:text-white">
           Our Security Services
         </h1>
         <p className="mb-12 text-lg text-center text-gray-700 dark:text-gray-300 max-w-2xl">
@@ -15,9 +16,13 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mb-16">
           {/* Security Assessment */}
           <div className="bg-white dark:bg-[#232323] rounded-xl shadow-lg border border-gray-100 dark:border-[#232323] p-6 flex flex-col items-center transition hover:shadow-2xl hover:-translate-y-1 duration-200">
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-lg bg-[#10B981] bg-opacity-10">
-              {/* <Image ... /> */}
-            </div>
+            <Image
+              src="/images/shield.png"
+              alt="Security Testing Icon"
+              width={96}
+              height={96}
+              className="mx-auto mb-4 max-w-128 max-h-128"
+            />
             <h2 className="text-xl font-bold mb-2 text-[#10B981]">
               Security Assessment
             </h2>
@@ -30,9 +35,13 @@ export default function Services() {
           </div>
           {/* Vulnerability Assessment */}
           <div className="bg-white dark:bg-[#232323] rounded-xl shadow-lg border border-gray-100 dark:border-[#232323] p-6 flex flex-col items-center transition hover:shadow-2xl hover:-translate-y-1 duration-200">
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-lg bg-[#10B981] bg-opacity-10">
-              {/* <Image ... /> */}
-            </div>
+            <Image
+              src="/images/search.png"
+              alt="Security Testing Icon"
+              width={96}
+              height={96}
+              className="mx-auto mb-4 max-w-128 max-h-128"
+            />
             <h2 className="text-xl font-bold mb-2 text-[#10B981]">
               Vulnerability Assessment
             </h2>
@@ -44,9 +53,13 @@ export default function Services() {
           </div>
           {/* Managed Security Services */}
           <div className="bg-white dark:bg-[#232323] rounded-xl shadow-lg border border-gray-100 dark:border-[#232323] p-6 flex flex-col items-center transition hover:shadow-2xl hover:-translate-y-1 duration-200">
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-lg bg-[#10B981] bg-opacity-10">
-              {/* <Image ... /> */}
-            </div>
+            <Image
+              src="/images/chip.png"
+              alt="Security Testing Icon"
+              width={96}
+              height={96}
+              className="mx-auto mb-4 max-w-128 max-h-128"
+            />
             <h2 className="text-xl font-bold mb-2 text-[#10B981]">
               Managed Security Services
             </h2>
@@ -58,9 +71,13 @@ export default function Services() {
           </div>
           {/* Custom Security Solutions */}
           <div className="bg-white dark:bg-[#232323] rounded-xl shadow-lg border border-gray-100 dark:border-[#232323] p-6 flex flex-col items-center transition hover:shadow-2xl hover:-translate-y-1 duration-200">
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-lg bg-[#10B981] bg-opacity-10">
-              {/* <Image ... /> */}
-            </div>
+            <Image
+              src="/images/shield.png"
+              alt="Security Testing Icon"
+              width={96}
+              height={96}
+              className="mx-auto mb-4 max-w-128 max-h-128"
+            />
             <h2 className="text-xl font-bold mb-2 text-[#10B981]">
               Custom Security Solutions
             </h2>
@@ -72,11 +89,11 @@ export default function Services() {
           </div>
         </div>
         {/* Contact Us Prompt */}
-        <div className="w-full bg-[#10B981] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center">
+        <div className="w-full bg-[#10B981] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
           <h3 className="text-2xl font-bold text-white mb-2">Contact Us</h3>
           <p className="text-white mb-6 text-center max-w-xl">
-            Need help or want to discuss your security challenges? Fill out the
-            form below and our team will get in touch!
+            Want to learn more or discuss your security needs? Reach out and let&apos;s
+            connect!
           </p>
           <form
             className="w-full max-w-md flex flex-col gap-4"
@@ -89,7 +106,7 @@ export default function Services() {
               required
             />
             <textarea
-              placeholder="Describe your issue or what you need help with..."
+              placeholder="Your message..."
               className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
               rows={4}
               required
@@ -100,12 +117,9 @@ export default function Services() {
               disabled
               title="This is a mockup. Submission is not implemented."
             >
-              Send (Mockup)
+              Send
             </button>
           </form>
-          <p className="text-white text-xs mt-4 opacity-80">
-            *This is a mockup. Your message will not be sent.
-          </p>
         </div>
       </main>
     </div>
