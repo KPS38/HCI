@@ -1,10 +1,12 @@
 'use client'
 import Image from "next/image";
+import { useState } from "react";
 
 export default function About() {
   return (
-    <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen py-12 px-4">
-      <main className="max-w-4xl mx-auto flex flex-col items-center">
+    <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen px-4">
+      {/* Remove py-12 from outer div, add pt-16 to main to offset navbar height */}
+      <main className="max-w-4xl mx-auto flex flex-col items-center py-12">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323] dark:text-white">
           About cyOps
         </h1>
@@ -73,38 +75,102 @@ export default function About() {
           </div>
         </div>
         {/* Contact block */}
-        <div className="w-full bg-[#10B981] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
+        <div className="w-full bg-black bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
           <h3 className="text-2xl font-bold text-white mb-2">Contact Us</h3>
           <p className="text-white mb-6 text-center max-w-xl">
             Want to learn more or join our team? Reach out and let&apos;s connect!
           </p>
-          <form
-            className="w-full max-w-md flex flex-col gap-4"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
-              required
-            />
-            <textarea
-              placeholder="Your message..."
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
-              rows={4}
-              required
-            />
-            <button
-              type="submit"
-              className="bg-white text-[#10B981] font-bold py-2 px-6 rounded hover:bg-gray-100 transition-colors"
-              disabled
-              title="This is a mockup. Submission is not implemented."
-            >
-              Send
-            </button>
-          </form>
+          <AboutContactForm />
         </div>
       </main>
     </div>
+  );
+}
+
+function AboutContactForm() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitted(true);
+    setEmail("");
+    setName("");
+    setSurname("");
+    setCvFile(null);
+    setTimeout(() => setSubmitted(false), 3000); // Hide popup after 3s
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCvFile(e.target.files?.[0] || null);
+  }
+
+  return (
+    <>
+      <form
+        className="w-full max-w-md flex flex-col gap-4"
+        onSubmit={handleSubmit}
+      >
+        <input
+          type="email"
+          placeholder="Your email address"
+          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          required
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          disabled={submitted}
+        />
+        <input
+          type="text"
+          placeholder="Name"
+          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          required
+          value={name}
+          onChange={e => setName(e.target.value)}
+          disabled={submitted}
+        />
+        <input
+          type="text"
+          placeholder="Surname"
+          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          required
+          value={surname}
+          onChange={e => setSurname(e.target.value)}
+          disabled={submitted}
+        />
+        <div>
+          <label className="block mb-1 text-white font-semibold">Upload your CV (mockup only)</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx,.txt"
+            className="block w-full text-black bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+            onChange={handleFileChange}
+            disabled={submitted}
+          />
+          {cvFile && (
+            <span className="text-xs text-gray-300 mt-1 block">Selected: {cvFile.name}</span>
+          )}
+        </div>
+        <button
+          type="submit"
+          className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
+          disabled={submitted}
+          title="This is a mockup. Submission is not implemented."
+        >
+          Send
+        </button>
+      </form>
+      {submitted && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="bg-black bg-opacity-90 text-white px-8 py-6 rounded-xl shadow-lg text-center font-semibold pointer-events-auto">
+            Thank you for your interest! We will contact you as soon as possible.<br />
+            <span className="text-xs opacity-70">*This is a mockup. Your message was not sent.</span>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

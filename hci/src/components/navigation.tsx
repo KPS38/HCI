@@ -45,13 +45,17 @@ export function Navigation() {
   const [menuOpen, setMenuOpen] = useState<{ [key: string]: boolean }>({});
   const [user, setUser] = useState<User | null>(null);
   const [basketCount, setBasketCount] = useState(0);
+  const [userLoading, setUserLoading] = useState(true); // Add loading state
 
   useEffect(() => {
+    setUserLoading(true);
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user ?? null);
+      setUserLoading(false);
     });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setUserLoading(false);
     });
     return () => {
       listener?.subscription.unsubscribe();
@@ -104,11 +108,11 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-gradient-to-b from-black to-[#1e1e1e] border-b border-black fixed top-0 left-0 w-full z-50">
-      <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12">
+    <nav className="bg-gradient-to-b from-black to-[#1e1e1e] border-b border-black fixed top-0 left-0 w-full z-50 h-16">
+      <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12 h-16">
         <div className="flex items-center h-16">
           <Link href="/">
-            <Image src="/images/icon.png" alt="Logo" width={48} height={48} className="h-12 w-12" />
+            <Image src="/images/icon.png" alt="Logo" width={32} height={32} className="h-8 w-8" />
           </Link>
         </div>
 
@@ -148,22 +152,38 @@ export function Navigation() {
 
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center flex-1 justify-end relative max-w-2xl ml-auto">
-          <div className="flex flex-1 justify-end">
+          <div className="flex flex-1 justify-end h-16">
             {pages.map((page, index) => (
               <div
                 key={index}
-                className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center cursor-pointer"
-                style={{ minWidth: 0, maxWidth: "160px" }}
+                className="relative group border-b border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex-1 flex flex-col items-center cursor-pointer min-w-0"
+                style={{
+                  height: "64px",
+                  alignSelf: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  borderBottomWidth: "2px"
+                }}
                 onClick={() => window.location.href = page.path}
                 tabIndex={0}
                 role="button"
               >
                 <div className="flex items-center justify-center w-full h-full">
-                  <span
-                    className={`block text-white text-center w-full py-8 font-normal hover:text-[#10B981] transition duration-300`}
+                  <button
+                    type="button"
+                    className="block text-white text-base w-full py-4 hover:text-[#10B981] transition duration-300 text-center bg-transparent border-none"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      minWidth: 0
+                    }}
+                    tabIndex={-1}
                   >
                     {page.title}
-                  </span>
+                  </button>
                   {page.subPages && (
                     <button
                       type="button"
@@ -219,64 +239,93 @@ export function Navigation() {
         </div>
         {/* User account and sign in button - only show on desktop */}
         <div className="hidden md:flex items-center">
-          {user && (
-            <div
-              className="relative group border-b-2 border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex flex-col items-center"
-              style={{ minWidth: "160px", maxWidth: "160px", width: "160px" }}
-            >
-              <div className="flex items-center justify-center w-full h-full">
-                <button
-                  type="button"
-                  className="block text-white text-base w-full py-8 hover:text-[#10B981] transition duration-300 text-center bg-transparent border-none"
-                  style={{ width: "100%" }}
-                >
-                  {dashboardMenu.title}
-                </button>
-              </div>
+          <div style={{ minWidth: "160px", maxWidth: "160px", width: "160px", display: "flex", justifyContent: "center" }}>
+            {userLoading ? (
+              <button
+                type="button"
+                className="block text-white text-base w-full py-4 bg-transparent border-none cursor-default"
+                style={{ width: "100%", opacity: 0 }}
+                disabled
+                tabIndex={-1}
+              >
+                Dashboard
+              </button>
+            ) : user ? (
               <div
-                className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10"
+                className="relative group border-b border-[#1e1e1e] hover:border-[#10B981] transition duration-300 flex flex-col items-center cursor-pointer"
                 style={{
                   minWidth: "160px",
                   maxWidth: "160px",
                   width: "160px",
-                  padding: "12px 0",
-                  whiteSpace: "nowrap",
+                  height: "64px",
+                  alignSelf: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  borderBottomWidth: "2px"
                 }}
+                tabIndex={0}
+                role="button"
               >
-                <div className="w-full flex flex-col items-center">
-                  {dashboardMenu.subPages?.map((subPage, subIndex) =>
-                    subPage.title === "Sign Out" ? (
-                      <button
-                        key={subIndex}
-                        onClick={handleSignOut}
-                        className="block px-6 py-2 w-full text-center hover:text-[#10B981] transition duration-300 bg-transparent border-none text-base"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        {subPage.title}
-                      </button>
-                    ) : (
-                      <Link
-                        key={subIndex}
-                        href={subPage.path}
-                        className="block px-6 py-2 hover:text-[#10B981] transition duration-300 w-full text-center text-base"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        {subPage.title}
-                      </Link>
-                    )
-                  )}
+                <div className="flex items-center justify-center w-full h-full">
+                  <button
+                    type="button"
+                    className="block text-white text-base w-full py-4 hover:text-[#10B981] transition duration-300 text-center bg-transparent border-none"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {dashboardMenu.title}
+                  </button>
+                </div>
+                <div
+                  className="hidden group-hover:flex flex-col items-center absolute top-full left-0 w-full bg-[#1e1e1e] border-t-2 border-[#10B981] text-white transition duration-300 shadow-lg rounded-b-md z-10"
+                  style={{
+                    minWidth: "160px",
+                    maxWidth: "160px",
+                    width: "160px",
+                    padding: "12px 0",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <div className="w-full flex flex-col items-center">
+                    {dashboardMenu.subPages?.map((subPage, subIndex) =>
+                      subPage.title === "Sign Out" ? (
+                        <button
+                          key={subIndex}
+                          onClick={handleSignOut}
+                          className="block px-6 py-2 w-full text-center hover:text-[#10B981] transition duration-300 bg-transparent border-none text-base"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {subPage.title}
+                        </button>
+                      ) : (
+                        <Link
+                          key={subIndex}
+                          href={subPage.path}
+                          className="block px-6 py-2 hover:text-[#10B981] transition duration-300 w-full text-center text-base"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {subPage.title}
+                        </Link>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {!user && (
-            <Link
-              href="/signin"
-              className="text-[#10B981] border-2 border-[#10B981] ml-2 px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300"
-            >
-              Sign In
-            </Link>
-          )}
+            ) : (
+              <Link
+                href="/signin"
+                className="text-[#10B981] border-2 border-[#10B981] px-4 py-2 rounded-md font-bold hover:bg-[#10B981] hover:text-white transition duration-300 w-full text-center"
+                style={{ minWidth: "160px", maxWidth: "160px", width: "160px", display: "inline-block" }}
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

@@ -65,10 +65,11 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
           {posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post: Post) => (
-                <div
+                <Link
                   key={post.id}
-                  className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg flex flex-col h-full relative"
-                  style={{ minHeight: "420px", display: "flex" }}
+                  href={`/blog/${post.id}`}
+                  className="bg-white dark:bg-[#1e1e1e] border rounded-lg shadow-lg flex flex-col h-full relative hover:shadow-xl transition-shadow duration-200 group"
+                  style={{ minHeight: "420px", display: "flex", textDecoration: "none" }}
                 >
                   {post.image && (
                     <Image
@@ -80,16 +81,13 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
                     />
                   )}
                   <div className="p-6 flex flex-col flex-1 relative">
-                    <h2 className="text-2xl font-semibold mb-3 text-gray-800 dark:text-white">{post.title}</h2>
+                    <h2 className="text-2xl font-semibold mb-3 text-gray-800 dark:text-white group-hover:text-[#10B981]">{post.title}</h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-8 line-clamp-3">{post.brief}</p>
                     <div className="flex-1" />
                     <div className="absolute left-6 bottom-6">
-                      <Link
-                        href={`/blog/${post.id}`}
-                        className="text-[#10B981] font-medium hover:underline"
-                      >
+                      <span className="text-[#10B981] font-medium hover:underline">
                         Read More
-                      </Link>
+                      </span>
                     </div>
                     <div className="absolute right-6 bottom-6">
                       <span className="text-sm text-gray-400 dark:text-gray-300">
@@ -97,7 +95,7 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (
@@ -117,4 +115,3 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
     </div> 
   );
 }
-
