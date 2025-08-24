@@ -93,15 +93,17 @@ function AboutContactForm() {
   const [surname, setSurname] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
-    setEmail("");
-    setName("");
-    setSurname("");
-    setCvFile(null);
-    setTimeout(() => setSubmitted(false), 3000); // Hide popup after 3s
+  setSubmitted(true);
+  setEmail("");
+  setName("");
+  setSurname("");
+  setCvFile(null);
+  setFileInputKey(prev => prev + 1); // Force file input to reset
+  setTimeout(() => setSubmitted(false), 3000); // Hide popup after 3s
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -144,6 +146,7 @@ function AboutContactForm() {
         <div>
           <label className="block mb-1 text-white font-semibold">Upload your CV (mockup only)</label>
           <input
+            key={fileInputKey}
             type="file"
             accept=".pdf,.doc,.docx,.txt"
             className="block w-full text-black bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#10B981]"

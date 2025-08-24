@@ -10,7 +10,6 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
@@ -28,8 +27,7 @@ export default function SignInPage() {
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
+  setError(null);
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -46,10 +44,9 @@ export default function SignInPage() {
   }
 
   async function handleSignOut() {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSuccess(null);
-    setError(null);
+  await supabase.auth.signOut();
+  setUser(null);
+  setError(null);
   }
 
   return (
@@ -92,7 +89,6 @@ export default function SignInPage() {
         </form>
         {user && (
           <div className="flex flex-col items-center gap-4 mt-6">
-            <p className="text-green-600 text-center">You are signed in as {user.email}</p>
             <button
               onClick={handleSignOut}
               className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
@@ -106,9 +102,6 @@ export default function SignInPage() {
         )}
         {error && (
           <p className="text-red-600 text-center mt-4">{error}</p>
-        )}
-        {success && (
-          <p className="text-green-600 text-center mt-4">{success}</p>
         )}
         {!user && (
           <div className="mt-6 text-center text-gray-600 dark:text-gray-400">

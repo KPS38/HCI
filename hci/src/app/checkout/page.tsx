@@ -39,11 +39,23 @@ export default function CheckoutPage() {
       const { data } = await supabase.auth.getUser();
       if (data?.user) hasUser = true;
 
-      // Check basket
+      // Check basket with expiry
       let basket: { id: string; name: string; price: string; imageUrl?: string; quantity: number }[] = [];
       if (typeof window !== "undefined") {
         const basketRaw = localStorage.getItem("basket");
-        basket = basketRaw ? JSON.parse(basketRaw) : [];
+        if (basketRaw) {
+          try {
+            const data = JSON.parse(basketRaw);
+            if (data.expiry && Date.now() > data.expiry) {
+              localStorage.removeItem("basket");
+              basket = [];
+            } else {
+              basket = Array.isArray(data.items) ? data.items : [];
+            }
+          } catch {
+            basket = [];
+          }
+        }
       }
       if (basket.length > 0) hasBasket = true;
 
@@ -93,7 +105,19 @@ export default function CheckoutPage() {
 
     // Get basket from localStorage
     const basketRaw = typeof window !== "undefined" ? localStorage.getItem("basket") : null;
-    const basket: { id: string; name: string; price: string; imageUrl?: string; quantity: number }[] = basketRaw ? JSON.parse(basketRaw) : [];
+    let basket: { id: string; name: string; price: string; imageUrl?: string; quantity: number }[] = [];
+    if (basketRaw) {
+      try {
+        const data = JSON.parse(basketRaw);
+        if (Array.isArray(data.items)) {
+          basket = data.items;
+        } else if (Array.isArray(data)) {
+          basket = data;
+        }
+      } catch {
+        basket = [];
+      }
+    }
 
     // Get user
     const { data } = await supabase.auth.getUser();
@@ -115,7 +139,7 @@ export default function CheckoutPage() {
     setLoading(true);
 
     // Calculate total with discount from basket
-    const total = basket.reduce((sum: number, item) => sum + parseFloat(item.price) * item.quantity, 0);
+    const total = basket.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
     const discountedTotal = discount > 0 ? total * (1 - discount / 100) : total;
 
     // Save order to Supabase

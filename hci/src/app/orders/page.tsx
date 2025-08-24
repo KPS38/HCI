@@ -27,27 +27,66 @@ export default function OrdersPage() {
 
   useEffect(() => {
     async function fetchOrders() {
+      // Expire user session after 1 day (client-side only)
       const { data: auth } = await supabase.auth.getUser();
       const user: User | null = auth?.user;
-      if (!user) {
+      const sessionExpiryKey = "user_session_expiry";
+      const now = Date.now();
+      let validUser = user;
+      if (typeof window !== "undefined") {
+        const expiry = localStorage.getItem(sessionExpiryKey);
+        if (expiry && now > Number(expiry)) {
+          localStorage.removeItem(sessionExpiryKey);
+          validUser = null;
+        }
+      }
+      if (!validUser) {
         setOrders([]);
         setLoading(false);
         return;
       }
+      // Set/refresh session expiry on access (1 day)
+      if (typeof window !== "undefined") {
+        localStorage.setItem(sessionExpiryKey, (now + 1 * 24 * 60 * 60 * 1000).toString());
+      }
+      // Fix: Supabase returns items as JSON string or as JSONB array
       const { data } = await supabase
         .from("orders")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", validUser.id)
         .order("created_at", { ascending: false });
-      setOrders(data || []);
+      const parsedOrders = (data || []).map(order => {
+        let items = [];
+        if (Array.isArray(order.items)) {
+          items = order.items;
+        } else if (typeof order.items === "string") {
+          try {
+            const parsed = JSON.parse(order.items);
+            if (Array.isArray(parsed)) {
+              items = parsed;
+            } else if (parsed && typeof parsed === "object" && Array.isArray(parsed.items)) {
+              items = parsed.items;
+            }
+          } catch {
+            items = [];
+          }
+        } else if (order.items && typeof order.items === "object" && Array.isArray(order.items.items)) {
+          items = order.items.items;
+        }
+        return {
+          ...order,
+          items,
+        };
+      });
+      setOrders(parsedOrders);
       setLoading(false);
     }
     fetchOrders();
   }, []);
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#18181b] py-12 mt-24 px-4 flex flex-col items-center">
-      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
+    <main className="min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] py-12 px-4 flex flex-col items-center justify-center">
+      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg mt-24 p-8 mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-center text-black dark:text-white">Your Orders</h1>
         {loading ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-12">Loading...</div>

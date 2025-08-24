@@ -25,7 +25,16 @@ export default function CertificationPost({ params }: CertificationProps) {
       const stored = localStorage.getItem("basket");
       if (stored) {
         try {
-          current = JSON.parse(stored);
+          // Support basket expiry logic (same as main page)
+          const data = JSON.parse(stored);
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem("basket");
+            current = [];
+          } else if (Array.isArray(data.items)) {
+            current = data.items;
+          } else if (Array.isArray(data)) {
+            current = data;
+          }
         } catch {
           current = [];
         }
@@ -43,8 +52,10 @@ export default function CertificationPost({ params }: CertificationProps) {
     } else {
       updated = [...current, { ...item }];
     }
+    // Save basket with expiry (1 day)
     if (typeof window !== "undefined") {
-      localStorage.setItem("basket", JSON.stringify(updated));
+      const expiry = Date.now() + 1 * 24 * 60 * 60 * 1000;
+      localStorage.setItem("basket", JSON.stringify({ items: updated, expiry }));
     }
   }
 
@@ -61,7 +72,11 @@ export default function CertificationPost({ params }: CertificationProps) {
   }
 
   if (!post) {
-    return <h1 className="text-center mt-10 text-3xl text-white">Certification Not Found</h1>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="text-lg text-gray-500">Loading...</span>
+      </div>
+    );
   }
 
   const { name, provider, description, duration, price, image, difficulty } = post;

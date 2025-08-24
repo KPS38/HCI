@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link';
 import Image from 'next/image';
 import { getCertifications, Certification } from "./_lib/api";
 import CertificationFilter from "./_components/filter";
@@ -48,13 +47,19 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
   }
 
   function addItem(item: { id: string; name: string; price: string; imageUrl?: string; quantity: number }) {
-    // Always start from the latest basket in localStorage
+    // Always start from the latest basket in localStorage, with expiry
     let current: { id: string; name: string; price: string; imageUrl?: string; quantity?: number }[] = [];
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("basket");
       if (stored) {
         try {
-          current = JSON.parse(stored);
+          const data = JSON.parse(stored);
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem("basket");
+            current = [];
+          } else {
+            current = Array.isArray(data.items) ? data.items : [];
+          }
         } catch {
           current = [];
         }
@@ -72,8 +77,10 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
     } else {
       updated = [...current, { ...item }];
     }
+    // Save basket with expiry (1 day)
     if (typeof window !== "undefined") {
-      localStorage.setItem("basket", JSON.stringify(updated));
+      const expiry = Date.now() + 1 * 24 * 60 * 60 * 1000;
+      localStorage.setItem("basket", JSON.stringify({ items: updated, expiry }));
     }
   }
 
@@ -157,7 +164,16 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
             {sorted.map((cert) => (
               <div
                 key={cert.id}
-                className="bg-gray-100 dark:bg-[#1e1e1e] border-b border-r border-gray-300 dark:border-gray-700 flex flex-col"
+                className="bg-gray-100 dark:bg-[#1e1e1e] border-b border-r border-gray-300 dark:border-gray-700 flex flex-col group cursor-pointer"
+                // Make the whole card clickable except the Add to cart button
+                onClick={e => {
+                  // Prevent click if Add to cart button is clicked
+                  if ((e.target as HTMLElement).closest("button")) return;
+                  window.location.href = `/certifications/${cert.id}`;
+                }}
+                tabIndex={0}
+                role="link"
+                style={{ outline: "none" }}
               >
                 {cert.image && (
                   <Image
@@ -165,16 +181,16 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                     alt={cert.name}
                     width={340}
                     height={180}
-                    className="w-[340px] h-[180px] object-contain mx-auto py-4"
+                    className="w-[340px] h-[180px] object-contain mx-auto py-4 pointer-events-none"
                   />
                 )}
                 <div className="p-4 md:p-6 flex flex-col flex-1 relative">
-                  <Link
-                    href={`/certifications/${cert.id}`}
-                    className="text-base md:text-lg font-bold mb-2 text-left text-[#10B981] hover:underline"
+                  {/* Certificate name: black, green on hover */}
+                  <span
+                    className="text-base md:text-lg font-bold mb-2 text-left text-black group-hover:text-[#10B981] transition-colors duration-150"
                   >
                     {cert.name}
-                  </Link>
+                  </span>
                   <span className="text-xs text-gray-400">{cert.provider} | {cert.difficulty}</span>
                   <p className="text-gray-600 dark:text-gray-300 mb-1 text-base md:text-lg font-semibold">
                     € {cert.price}
@@ -183,7 +199,10 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                     <button
                       type="button"
                       className="w-full bg-[#10B981] text-white font-bold py-2 rounded hover:bg-[#059669] transition-colors mt-2"
-                      onClick={() => handleAddToCart(cert)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleAddToCart(cert);
+                      }}
                     >
                       Add to cart
                     </button>
@@ -197,8 +216,14 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
             {sorted.map((cert) => (
               <div
                 key={cert.id}
-                className="flex flex-row items-center bg-gray-100 dark:bg-[#1e1e1e] px-4 py-4"
+                className="flex flex-row items-center bg-gray-100 dark:bg-[#1e1e1e] px-4 py-4 group cursor-pointer"
                 style={{ borderBottom: "1.5px solid #d1d5db", paddingTop: "16px", paddingBottom: "16px" }}
+                onClick={e => {
+                  if ((e.target as HTMLElement).closest("button")) return;
+                  window.location.href = `/certifications/${cert.id}`;
+                }}
+                tabIndex={0}
+                role="link"
               >
                 {cert.image && (
                   <Image
@@ -206,16 +231,15 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                     alt={cert.name}
                     width={60}
                     height={40}
-                    className="object-contain rounded mr-3"
+                    className="object-contain rounded mr-3 pointer-events-none"
                   />
                 )}
                 <div className="flex-1 flex flex-col justify-center">
-                  <Link
-                    href={`/certifications/${cert.id}`}
-                    className="text-base font-bold mb-1 text-left text-[#10B981] hover:underline"
+                  <span
+                    className="text-base font-bold mb-1 text-left text-black group-hover:text-[#10B981] transition-colors duration-150"
                   >
                     {cert.name}
-                  </Link>
+                  </span>
                   <span className="text-xs text-gray-400">{cert.provider} | {cert.difficulty}</span>
                   <span className="text-sm text-gray-600 dark:text-gray-300">
                     <strong>€ {cert.price}</strong>
@@ -225,7 +249,10 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                   <button
                     type="button"
                     className="bg-[#10B981] text-white font-bold py-2 px-3 rounded hover:bg-[#059669] transition-colors"
-                    onClick={() => handleAddToCart(cert)}
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleAddToCart(cert);
+                    }}
                   >
                     Add to cart
                   </button>

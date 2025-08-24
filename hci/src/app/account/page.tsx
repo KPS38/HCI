@@ -24,7 +24,7 @@ export default function AccountPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-[#18181b] px-4">
+    <main className="flex flex-col items-center justify-center min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] px-4">
       <div className="w-full max-w-md bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-black">Account</h1>
         {user ? (

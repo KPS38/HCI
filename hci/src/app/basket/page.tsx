@@ -47,15 +47,7 @@ export default function BasketPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("basket");
-      if (stored) {
-        // Upgrade old basket format if needed
-        const parsed: BasketItem[] = JSON.parse(stored);
-        const upgraded = parsed.map(item =>
-          item.quantity ? item : { ...item, quantity: 1 }
-        );
-        setItems(upgraded);
-      }
+      setItems(getBasketWithExpiry());
     }
   }, []);
 
@@ -93,7 +85,7 @@ export default function BasketPage() {
     const updated = items.filter(item => item.id !== id);
     setItems(updated);
     if (typeof window !== "undefined") {
-      localStorage.setItem("basket", JSON.stringify(updated));
+      setBasketWithExpiry(updated);
     }
   }
 
@@ -104,7 +96,7 @@ export default function BasketPage() {
     );
     setItems(updated);
     if (typeof window !== "undefined") {
-      localStorage.setItem("basket", JSON.stringify(updated));
+      setBasketWithExpiry(updated);
     }
   }
 
@@ -116,9 +108,32 @@ export default function BasketPage() {
     }
   }
 
+  // Utility: set basket with expiry (in localStorage)
+  function setBasketWithExpiry(items: BasketItem[], days: number = 1) {
+    const expiry = Date.now() + days * 24 * 60 * 60 * 1000;
+    const data = { items, expiry };
+    localStorage.setItem("basket", JSON.stringify(data));
+  }
+
+  // Utility: get basket with expiry check
+  function getBasketWithExpiry(): BasketItem[] {
+    const stored = localStorage.getItem("basket");
+    if (!stored) return [];
+    try {
+      const data = JSON.parse(stored);
+      if (data.expiry && Date.now() > data.expiry) {
+        localStorage.removeItem("basket");
+        return [];
+      }
+      return Array.isArray(data.items) ? data.items : [];
+    } catch {
+      return [];
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] pt-24 px-4 flex flex-col items-center">
-      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-4 sm:p-8">
+    <main className="min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] pt-24 px-4 flex flex-col items-center justify-center">
+      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] mt-8 rounded-lg shadow-lg p-4 sm:p-8 mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-center text-black dark:text-white">Your Basket</h1>
         {items.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-12">

@@ -31,7 +31,7 @@ const pages: Page[] = [
 
 const dashboardMenu: Page = {
   title: "Dashboard",
-  path: "/dashboard",
+  path: "/account",
   subPages: [
     { title: "Account", path: "/account" },
     { title: "Orders", path: "/orders" },
@@ -68,8 +68,22 @@ export function Navigation() {
         const stored = localStorage.getItem("basket");
         if (stored) {
           try {
-            const items = JSON.parse(stored);
-            setBasketCount(Array.isArray(items) ? items.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0);
+            const data = JSON.parse(stored);
+            // Support both old and new basket formats
+            let items: unknown[] = [];
+            if (Array.isArray(data)) {
+              items = data;
+            } else if (Array.isArray(data.items)) {
+              items = data.items;
+            }
+            setBasketCount(
+              items.reduce((sum: number, item) => {
+                if (typeof item === 'object' && item !== null && 'quantity' in item) {
+                  return sum + ((item as { quantity?: number }).quantity || 1);
+                }
+                return sum + 1;
+              }, 0)
+            );
           } catch {
             setBasketCount(0);
           }
@@ -264,7 +278,6 @@ export function Navigation() {
                   borderBottomWidth: "2px"
                 }}
                 tabIndex={0}
-                role="button"
               >
                 <div className="flex items-center justify-center w-full h-full">
                   <button
@@ -277,6 +290,8 @@ export function Navigation() {
                       border: "none",
                       cursor: "pointer"
                     }}
+                    tabIndex={-1}
+                    onClick={() => router.push('/account')}
                   >
                     {dashboardMenu.title}
                   </button>
@@ -303,14 +318,14 @@ export function Navigation() {
                           {subPage.title}
                         </button>
                       ) : (
-                        <Link
+                        <button
                           key={subIndex}
-                          href={subPage.path}
-                          className="block px-6 py-2 hover:text-[#10B981] transition duration-300 w-full text-center text-base"
+                          onClick={() => router.push(subPage.path)}
+                          className="block px-6 py-2 hover:text-[#10B981] transition duration-300 w-full text-center text-base bg-transparent border-none"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           {subPage.title}
-                        </Link>
+                        </button>
                       )
                     )}
                   </div>
