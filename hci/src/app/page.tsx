@@ -1,6 +1,5 @@
 'use client'
 
-import GlitchText from 'react-text-glitch';
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
