@@ -18,8 +18,8 @@
 
 ### Semester Project
 
-- Link to your production version: [**Production Version**](URL_TO_PRODUCTION_VERSION) <!-- Replace with actual URL -->
-- Link to your final report: [**Final Report**](URL_TO_FINAL_REPORT) <!-- Replace with actual URL -->
+- Link to your production version: [**Production Version**](https://cyops.vercel.app/) <!-- Replace with actual URL -->
+- Link to your final report: [**Final Report**](https://www.notion.so/cyOps-Report-2593b8213e46803aa856d7e2af336937?source=copy_link) <!-- Replace with actual URL -->
 <!-- Add more as necessary -->
 
 ### Semester Assignments
