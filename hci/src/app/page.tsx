@@ -1,5 +1,6 @@
 'use client'
 
+import GlitchText from 'react-text-glitch';
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
@@ -68,7 +69,7 @@ export default function Home() {
             >
               <div className="items-center mt-16 gap-8 p-4 w-auto h-auto">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-center sm:text-left">
-                  Enterprise Security
+                  Enterprise Security <span className="text-[#10B981]">Solutions</span>
                 </h1>
                 <p className="mt-6 sm:text-xl text-gray-300 max-w-2xl mb-4 text-center sm:text-left">
                   Protect your digital assets with advanced cybersecurity expertise and continuous monitoring.
@@ -103,7 +104,7 @@ export default function Home() {
 
             {/* Services Section */}
             <section className="bg-white bg-opacity-90 text-[#1e1e1e] dark:bg-[#1e1e1e] dark:bg-opacity-90 dark:text-white text-center lg:text-left w-full py-12 p-4 items-center">
-              <div className="max-w-4xl max-h-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 bg-white dark:bg-[#1e1e1e] rounded-lg p-4">
+              <div className="max-w-4xl max-h-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 bg-white dark:bg-[#1e1e1e] rounded-lg p-4 border-t-8 border-[#10B981]">
                 <div className="p-4 border-b lg:border-b-0 lg:border-r border-[#1e1e1e] dark:border-white">
                   <Image
                     src="/images/shield.png"

@@ -126,7 +126,7 @@ export function Navigation() {
       <div className="max-w-screen-xl mx-auto flex items-center justify-between px-8 md:px-12 h-16">
         <div className="flex items-center h-16">
           <Link href="/">
-            <Image src="/images/icon.png" alt="Logo" width={32} height={32} className="h-8 w-8" />
+            <Image src="/images/icon.png" alt="Logo" width={32} height={32} className="h-12 w-12" />
           </Link>
         </div>
 
