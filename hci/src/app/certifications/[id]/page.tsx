@@ -83,7 +83,7 @@ export default function CertificationPost({ params }: CertificationProps) {
   const imageUrl = image?.fields.file.url ?? '';
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 dark:bg-[#18181b] px-4 py-10">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white bg-opacity-90 dark:bg-[#18181b] px-4 py-10">
       <article className="w-full max-w-2xl bg-white dark:bg-[#232323] border border-gray-200 dark:border-[#232323] shadow-xl rounded-2xl overflow-hidden p-8 relative">
         <Link
           href="/certifications"
