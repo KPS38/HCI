@@ -192,7 +192,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center py-12 px-4">
+    <main className="min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] flex flex-col items-center justify-center py-12 px-4">
       <div className="max-w-md w-full bg-white dark:bg-[#232323] my-8 rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-black dark:text-white">Payment</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
