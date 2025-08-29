@@ -133,7 +133,7 @@ export default function BasketPage() {
 
   return (
     <main className="min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] pt-24 px-4 flex flex-col items-center justify-center">
-      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] mt-8 rounded-lg shadow-lg p-4 sm:p-8 mx-auto">
+      <div className="max-w-2xl w-full bg-white dark:bg-[#232323] my-8 rounded-lg shadow-lg p-4 sm:p-8 mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-center text-black dark:text-white">Your Basket</h1>
         {items.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-12">
