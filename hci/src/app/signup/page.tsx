@@ -49,7 +49,7 @@ export default function SignUpPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-[#18181b] flex flex-col items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
+      <div className="max-w-md w-full bg-white dark:bg-[#232323] my-8 rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-black dark:text-white">Sign Up</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSignUp}>
           <input
