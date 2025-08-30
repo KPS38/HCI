@@ -57,6 +57,9 @@ export default function BlogSearch({ searchParams }: BlogSearchProps) {
 
   return (
     <div className="flex justify-center mx-auto bg-white dark:bg-[#1e1e1e] bg-opacity-90 min-h-screen">
+      <video autoPlay muted loop className="backgroundVideo absolute inset-0 w-full h-full object-cover">
+        <source src="/images/wallpaper.mp4" type="video/mp4" />
+      </video>
       <div className="p-6">
         <div className="max-w-6xl mx-auto mb-auto py-12">
           <div>
