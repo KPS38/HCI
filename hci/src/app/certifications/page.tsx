@@ -106,6 +106,9 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
 
   return (
     <div className="flex flex-col md:flex-row gap-0 md:gap-8">
+      <video autoPlay muted loop className="backgroundVideo absolute inset-0 w-full h-full object-cover">
+        <source src="/images/wallpaper.mp4" type="video/mp4" />
+      </video>
       {/* Render CertificationFilter once, outside of responsive divs */}
       <div className="w-full md:w-1/4 border-r border-gray-200 dark:border-gray-800 pr-0 md:pr-6">
         <CertificationFilter certifications={certifications} onFiltered={handleFiltered} />

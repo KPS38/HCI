@@ -4,8 +4,12 @@ import { useState } from "react";
 
 export default function Services() {
   return (
+    
     <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen py-12 px-4">
       <main className="max-w-5xl mx-auto flex flex-col items-center">
+        <video autoPlay muted loop className="backgroundVideo absolute inset-0 w-full h-full object-cover">
+          <source src="/images/wallpaper.mp4" type="video/mp4" />
+        </video>
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323] dark:text-white">
           Our Security Services
         </h1>

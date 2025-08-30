@@ -23,6 +23,9 @@ export default function Blog() {
 
   return (
     <div className="bg-white dark:bg-[#18181b] bg-opacity-90 min-h-screen px-4 py-12">
+      <video autoPlay muted loop className="backgroundVideo absolute inset-0 w-full h-full object-cover">
+        <source src="/images/wallpaper.mp4" type="video/mp4" />
+      </video>
       <div className="max-w-4xl mx-auto flex flex-col items-center pt-16">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-center text-[#232323] dark:text-white">
           Latest News

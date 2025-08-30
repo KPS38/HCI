@@ -23,6 +23,9 @@ export default async function BlogPost({ params }: BlogPostProps) {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10 bg-white dark:bg-[#1e1e1e] bg-opacity-90">
+      <video autoPlay muted loop className="backgroundVideo absolute inset-0 w-full h-full object-cover">
+        <source src="/images/wallpaper.mp4" type="video/mp4" />
+      </video>
       <article className="w-full max-w-2xl bg-white dark:bg-[#1e1e1e] border dark:border-white shadow-lg rounded-lg overflow-hidden p-6 mt-32">
         <Link
           href="/blog/search"
