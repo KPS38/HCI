@@ -94,7 +94,7 @@ export default function Services() {
           </div>
         </div>
         {/* Contact Us Prompt */}
-        <div className="w-full bg-black bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
+        <div className="w-full bg-white dark:bg-[#232323] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
           <h3 className="text-2xl font-bold text-white mb-2">Contact Us</h3>
           <p className="text-white mb-6 text-center max-w-xl">
             Want to learn more or discuss your security needs? Reach out and let&apos;s
@@ -133,14 +133,14 @@ function ContactForm() {
         <input
           type="email"
           placeholder="Your email address"
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white"
           required
           value={email}
           onChange={e => setEmail(e.target.value)}
           disabled={submitted}
         />
         <select
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white"
           required
           value={service}
           onChange={e => setService(e.target.value)}
@@ -156,7 +156,7 @@ function ContactForm() {
         </select>
         <textarea
           placeholder="Your message..."
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white dark:bg-[#18181b] text-black dark:text-white"
           rows={4}
           required
           value={message}

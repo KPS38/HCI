@@ -59,7 +59,7 @@ export default function About() {
           </div>
         </div>
         {/* Our Team block */}
-        <div className="w-full flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg p-8 mb-12">
+        <div className="w-full flex flex-col md:flex-row items-center bg-white dark:bg-[#232323] rounded-2xl shadow-lg p-8 mb-12">
           <div className="flex-shrink-0 flex items-center justify-center w-full md:w-1/2 mb-6 md:mb-0 h-full">
             <Image
               src="/images/team.png"
@@ -78,7 +78,7 @@ export default function About() {
           </div>
         </div>
         {/* Contact block */}
-        <div className="w-full bg-black bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
+        <div className="w-full bg-white dark:bg-[#232323] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
           <h3 className="text-2xl font-bold text-white mb-2">Contact Us</h3>
           <p className="text-white mb-6 text-center max-w-xl">
             Want to learn more or join our team? Reach out and let&apos;s connect!
@@ -122,7 +122,7 @@ function AboutContactForm() {
         <input
           type="email"
           placeholder="Your email address"
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
           required
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -131,7 +131,7 @@ function AboutContactForm() {
         <input
           type="text"
           placeholder="Name"
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
           required
           value={name}
           onChange={e => setName(e.target.value)}
@@ -140,7 +140,7 @@ function AboutContactForm() {
         <input
           type="text"
           placeholder="Surname"
-          className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
+          className="px-4 py-2 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-black"
           required
           value={surname}
           onChange={e => setSurname(e.target.value)}
@@ -152,7 +152,7 @@ function AboutContactForm() {
             key={fileInputKey}
             type="file"
             accept=".pdf,.doc,.docx,.txt"
-            className="block w-full text-black bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+            className="block w-full text-black bg-white border border-gray-300 dark:border-gray-600 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
             onChange={handleFileChange}
             disabled={submitted}
           />
