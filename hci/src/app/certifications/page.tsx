@@ -201,14 +201,14 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                   <div className="flex flex-col items-center gap-2 mt-auto">
                     <button
                       type="button"
-                      className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white font-bold px-5 py-2 rounded-lg shadow transition-colors"
+                      className="flex items-center justify-center bg-[#10B981] hover:bg-[#059669] text-white font-bold px-5 py-2 rounded-lg shadow transition-colors"
                       onClick={e => {
                         e.stopPropagation();
                         handleAddToCart(cert);
                       }}
                     >
-                      <span>Add </span>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      Add
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7a1 1 0 00.9 1.3h12.2a1 1 0 00.9-1.3L17 13M7 13V6a1 1 0 011-1h9a1 1 0 011 1v7" />
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
