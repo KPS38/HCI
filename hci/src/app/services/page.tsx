@@ -95,8 +95,8 @@ export default function Services() {
         </div>
         {/* Contact Us Prompt */}
         <div className="w-full bg-white dark:bg-[#232323] bg-opacity-90 rounded-2xl p-8 shadow-lg flex flex-col items-center mt-8">
-          <h3 className="text-2xl font-bold text-white mb-2">Contact Us</h3>
-          <p className="text-white mb-6 text-center max-w-xl">
+          <h3 className="text-2xl font-bold text-black dark:text-white mb-2">Contact Us</h3>
+          <p className="text-black dark:text-white mb-6 text-center max-w-xl">
             Want to learn more or discuss your security needs? Reach out and let&apos;s
             connect!
           </p>

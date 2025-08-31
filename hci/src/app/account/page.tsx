@@ -26,10 +26,10 @@ export default function AccountPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white bg-opacity-90 dark:bg-[#18181b] px-4">
       <div className="w-full max-w-md bg-white dark:bg-[#232323] rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-black">Account</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-black dark:text-white">Account</h1>
         {user ? (
           <div className="flex flex-col gap-4 items-center">
-            <p className="text-black text-center">Email: {user.email}</p>
+            <p className="text-black dark:text-white text-center">Email: {user.email}</p>
             <button
               onClick={handleSignOut}
               className="bg-[#10B981] text-white font-bold py-2 px-6 rounded hover:bg-[#059669] transition-colors"
