@@ -201,7 +201,7 @@ function CertificationsGrid({ certifications }: { certifications: Certification[
                   <div className="flex flex-col items-center gap-2 mt-auto">
                     <button
                       type="button"
-                      className="w-full bg-[#10B981] text-white font-bold py-2 rounded hover:bg-[#059669] transition-colors mt-2"
+                      className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white font-bold px-5 py-2 rounded-lg shadow transition-colors"
                       onClick={e => {
                         e.stopPropagation();
                         handleAddToCart(cert);
